@@ -5,7 +5,15 @@
     <title>VComparison</title>
 </head>
 <body>
-<script src="js/three.js"></script>
+<script src="js/lib/three.js"></script>
+<script src="js/lib/plyloader.js"></script>
+
+<div class="control-element">
+    <input class="control-element__file" type="file" id="file"/>
+    <label class="submit-button__label" for="file">Выбрать файл с моделью</label>
+    <div class="submit-button__button" onClick="addFigure()">Добавить модель
+    </div>
+</div>
 
 <script src="js/main.js"></script>
 </body>
