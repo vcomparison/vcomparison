@@ -3,6 +3,7 @@ import * as THREE from "three";
 import * as TrackballControls from "three-trackballcontrols";
 import {PLYLoader} from "./plyloader";
 import BodyModel from '../../../models/BodyModel';
+import Slicer from "./Slicer";
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
@@ -54,16 +55,22 @@ class BodyChart extends PureComponent {
     this.initLight();
 
 
+    // slice body into halves
+    // FIXME relative to body's origin position and size
+    this.slicer = new Slicer(230);
+    this.slicer.setX(10);
+    this.slicer.setY(-100);
+    this.slicer.setZ(50);
+    this.slicer.draw(this.scene);
+
     // draw body
     this.addModel('cord.ply');
     this.addModel('BrainStem.ply');
     this.addModel('PTV56.ply');
     this.addModel('Body.ply');
 
-
     requestAnimationFrame(this.animate);
   }
-
 
   addModel = (modelName) => {
     this.loader.load(`http://localhost:5000/models/${modelName}`, (geometry) => {
@@ -126,20 +133,19 @@ class BodyChart extends PureComponent {
     this.renderer.render(this.scene, this.camera);
   };
 
-  toggleAngle = () => {
-  };
-
   render() {
     const {sliderValue} = this.state;
     return (
       <div>
         <input
           type="range"
-          min="0"
-          max="360"
+          min="-100"
+          max="150"
           step="10"
           value={sliderValue}
-          onChange={this.toggleAngle}
+          onChange={(e) => {
+            this.slicer.setZ(e.target.value)
+          }}
         ></input>
         <div ref={this.chartContainer}></div>
       </div>
