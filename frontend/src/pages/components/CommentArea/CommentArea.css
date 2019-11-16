@@ -1,7 +1,0 @@
-.comment-area {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: inherit;
-    border: 1px solid black;
-}

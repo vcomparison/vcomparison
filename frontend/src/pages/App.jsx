@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from "react";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Button } from "semantic-ui-react";
 import PlansModel from "../models/PlansModel";
 import PatientsModel from "../models/PatientsModel";
 import VoxelChart from "./components/VoxelChart";

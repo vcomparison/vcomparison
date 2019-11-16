@@ -1,0 +1,32 @@
+%button
+    color: white
+    border: none
+    padding: 10px
+    border-radius: 5px
+    margin: 8px 0 0 0
+    float: right
+    outline: none
+
+.comment-area
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    height: inherit
+    border: 1px solid black
+    z-index: 2
+    &__form
+        background: lightgray
+        padding: 8px
+        //max-height: 50px
+    &__button
+        &--primary
+            @extend %button
+            background: #2185d0
+        &--secondary
+            @extend %button
+            background: darkgray
+            margin-right: 4px
+    &__textarea
+        resize: none
+
+
