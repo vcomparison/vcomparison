@@ -1,4 +1,3 @@
-
 let scene;
 let camera;
 let controls;
@@ -6,62 +5,92 @@ let renderer;
 let loader = new THREE.PLYLoader();
 
 
-// function initCamera() {
-//   camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 15);
-//   camera.position.set(3, 3, 3);
-// }
+function initCamera() {
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(200, 20, 200);
+}
 
 function addFigure() {
   const submitter = document.getElementsByClassName("control-element__file")[0];
-  // if (0 === submitter.files.length) {
-  //   console.log('Nothing to submit!');
-  //   return;
-  // }
+  if (0 === submitter.files.length) {
+    console.log('Nothing to submit!');
+    return;
+  }
 
-  // const file = submitter.files[0];
-  // const filename = file.name;
+  const file = submitter.files[0];
 
-  // if (file) {
-  //   console.log(`loading file ${filename}`);
+  if (file) {
+    console.log(`loading file ${file.name}`);
 
-    loader.load('./js/models/cord.ply', function (geometry) {
-      console.log(`file has been loaded`);
-
+    loader.load('./js/models/' + file.name, function (geometry) {
       geometry.computeVertexNormals();
 
-      const material = new THREE.MeshStandardMaterial( { color: 0x0055ff, flatShading: true } );
-      const mesh = new THREE.Mesh( geometry, material );
+      const color = new THREE.Color( 0xffffff );
+      color.setHex( Math.random() * 0xffffff );
 
-      var cubeAxis = new THREE.AxesHelper(20);
-      mesh.add(cubeAxis);
+      const material = new THREE.MeshStandardMaterial({
+        color: color,
+        flatShading: true,
+        side: THREE.DoubleSide
+      });
+      const mesh = new THREE.Mesh(geometry, material);
 
-      scene.add( mesh );
-      console.log(`file has been added`);
+      mesh.rotateX(THREE.Math.degToRad(45));
+
+      scene.add(mesh);
     });
-  // }
+  }
 }
 
 
-function main() {
+function initScene() {
   scene = new THREE.Scene();
-  scene.background = new THREE.Color( 0xcccccc );
+  scene.background = new THREE.Color(0xcccccc);
+}
 
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(200, 20, 200);
+function initLight() {
+  const light1 = new THREE.DirectionalLight(0xffffff);
+  light1.position.set(1, 1, 1);
+  scene.add(light1);
 
+  const light2 = new THREE.DirectionalLight(0xffffff);
+  light2.position.set(1, -1, 0);
+  scene.add(light2);
+}
+
+function initCanvas() {
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  // appending renderer as canvas
   document.body.appendChild(renderer.domElement);
+}
 
+function initControls() {
+  controls = new THREE.TrackballControls(camera, renderer.domElement);
+  controls.addEventListener('change', render);
+}
 
-  controls = new THREE.TrackballControls( camera, renderer.domElement );
-  controls.addEventListener( 'change', render );
+function initAxis() {
+  const axesHelper = new THREE.AxesHelper(50);
+  scene.add(axesHelper);
+}
+
+function main() {
+  // mandatory set up
+  initScene();
+  initCamera();
+  initCanvas();
+  initControls();
+
+  // optional
+  initAxis();
+  initLight();
 
   animate();
 }
 
 function animate() {
-  requestAnimationFrame( animate );
+  requestAnimationFrame(animate);
 
   controls.update();
 
@@ -69,7 +98,7 @@ function animate() {
 }
 
 function render() {
-  renderer.render( scene, camera );
+  renderer.render(scene, camera);
 }
 
 
