@@ -32,6 +32,9 @@ class App extends PureComponent {
       .catch(() =>
         this.setState({ options: { patients: [] }, isLoaded: true })
       );
+    const canvas = this.canvas.current;
+    var context = canvas.getContext("2d");
+    context.scale(0.8, 0.8);
     this.loadImageToCanvas();
   }
 
@@ -99,8 +102,9 @@ class App extends PureComponent {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-xs-4">
-            <div>
+          <div className="col-xs-5">
+            <div className="app__layer-slider-container">
+              <div className="app__layer-slider-label">Layer value</div>
               <input
                 type="range"
                 min="-100"
@@ -110,45 +114,54 @@ class App extends PureComponent {
                 onChange={this.onLayerChange}
               ></input>
             </div>
+          </div>
+          <div className="col-xs-5">
+            {isLoaded && (
+              <div className="filters">
+                <Dropdown
+                  selection
+                  options={options.patients}
+                  value={filters.patients}
+                  onChange={this.onPatientChange}
+                />
+                {options.plans && (
+                  <Dropdown
+                    selection
+                    options={options.plans}
+                    value={filters.plans}
+                    onChange={this.onPlanChange}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+          <div className="col-xs-2">
+            <div className="app__comment-title">Comment</div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-5">
             <div className="app__block">
               <BodyChart layerValue={layerValue} />
             </div>
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-5">
             <div className="app__block">
               <div>
-                {isLoaded && (
-                  <div className="filters">
-                    <Dropdown
-                      selection
-                      options={options.patients}
-                      value={filters.patients}
-                      onChange={this.onPatientChange}
-                    />
-                    {options.plans && (
-                      <Dropdown
-                        selection
-                        options={options.plans}
-                        value={filters.plans}
-                        onChange={this.onPlanChange}
-                      />
-                    )}
-                  </div>
-                )}
                 <div
                   style={
                     options.plans && options.plans.length > 0
-                      ? { width: "600px" }
+                      ? { width: "394px" }
                       : { width: 0 }
                   }
                 >
-                  <canvas ref={this.canvas} width="600" height="600"></canvas>
+                  <canvas ref={this.canvas} width="394" height="394"></canvas>
                 </div>
                 {/* <VoxelChart /> */}
               </div>
             </div>
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-2">
             <div className="app__block">
               <CommentArea />
             </div>
