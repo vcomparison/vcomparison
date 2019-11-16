@@ -12,7 +12,7 @@ class CommentArea extends PureComponent {
       {
         id: nanoid(),
         message: "We need to know how to treat",
-        date: "10.10.2017",
+        date: "10.10.2019 13:38:37",
         author: 'John Doe',
         metadata: {},
         isMetadataPinned: false
@@ -20,7 +20,7 @@ class CommentArea extends PureComponent {
       {
         id: nanoid(),
         message: "Control our treatment process",
-        date: "11.10.2017",
+        date: "11.10.2019 11:00:31",
         author: 'John Doe',
         metadata: {},
         isMetadataPinned: false
@@ -63,7 +63,7 @@ class CommentArea extends PureComponent {
         {
           id: nanoid(),
           message: commentText,
-          date: getCurrentDate(),
+          date: getCurrentDate(true),
           author: 'me',
           metadata: this.props.currentMetadata
         }
