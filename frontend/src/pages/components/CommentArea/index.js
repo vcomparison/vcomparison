@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
-import { Form, TextArea } from "semantic-ui-react";
+import {Button, Form, TextArea} from "semantic-ui-react";
 import Comment from "../Comment";
-import "./CommentArea.css";
+import "./CommentArea.sass";
 
 class CommentArea extends PureComponent {
   state = {
@@ -11,7 +11,8 @@ class CommentArea extends PureComponent {
     ],
     comment: {
       commentText: ""
-    }
+    },
+    isCommentAreaShown: false
   };
 
   addCommentText = ({ target: { value } }) => {
@@ -19,19 +20,33 @@ class CommentArea extends PureComponent {
     this.setState({ comment: { ...comment, commentText: value } });
   };
 
+  onSendComment = (e) => {
+    console.log(e);
+  };
+
+  onCommentStart = (e) => {
+    console.log(e);
+    this.setState({ isCommentAreaShown: true });
+  };
+
   render() {
-    const { commentsList } = this.state;
+    const { commentsList, isCommentAreaShown } = this.state;
     return (
-      <div className="comment-area">
-        <div>
-          {commentsList.map(comment => (
-            <Comment key={comment.id} comment={comment}></Comment>
-          ))}
-        </div>
-        <Form onSubmit={this.onSendComment}>
-          <TextArea as="textarea" onChange={this.addCommentText}></TextArea>
-        </Form>
-      </div>
+
+            <div className="comment-area">
+                <div>
+                    {commentsList.map(comment => (
+                        <Comment key={comment.id} comment={comment}></Comment>
+                    ))}
+                </div>
+                { isCommentAreaShown ?
+                    <Form className="comment-area__form" onSubmit={this.onSendComment}>
+                      <TextArea className="comment-area__textarea" as="textarea" onChange={this.addCommentText}></TextArea>
+                      <button className="comment-area__button" >Send</button>
+                    </Form>
+                    :  <button className="comment-area__button" onClick={this.onCommentStart}>Leave comment</button>
+                }
+            </div>
     );
   }
 }
