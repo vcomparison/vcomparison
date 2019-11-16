@@ -17,7 +17,7 @@ class BodyChart extends PureComponent {
   initCamera = () => {
     const width = this.chartContainer.current.clientWidth;
     // FIXME set properly
-    const height = 300;
+    const height = 394;
 
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.set(200, 20, 200);
@@ -26,7 +26,7 @@ class BodyChart extends PureComponent {
   initCanvas = () => {
     const width = this.chartContainer.current.clientWidth;
     // FIXME set properly
-    const height = 300;
+    const height = 394;
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(width, height);

@@ -18,7 +18,8 @@ class App extends PureComponent {
       patients: "Lung"
     },
     options: {},
-    isLoaded: false
+    isLoaded: false,
+    isFirstlyLoaded: false
   };
 
   componentDidMount() {
@@ -66,9 +67,13 @@ class App extends PureComponent {
   };
 
   loadImageToCanvas = () => {
-    const { layerValue, filters } = this.state;
+    const { layerValue, filters, isFirstlyLoaded } = this.state;
     const canvas = this.canvas.current;
     var context = canvas.getContext("2d");
+    if (!isFirstlyLoaded) {
+      this.setState({ isFirstlyLoaded: true });
+      context.scale(0.9, 0.9);
+    }
 
     var imageObj = new Image();
 
