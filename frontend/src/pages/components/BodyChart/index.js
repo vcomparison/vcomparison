@@ -177,7 +177,7 @@ class BodyChart extends PureComponent {
   };
 
   renderScene = () => {
-    this.raycaster.setFromCamera(this.mouse, this.camera);
+    // this.raycaster.setFromCamera(this.mouse, this.camera);
 
     // FIXME enable raycasting
     // const intersects = this.raycaster.intersectObjects(this.scene.children);
