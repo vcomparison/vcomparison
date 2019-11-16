@@ -1,45 +1,52 @@
 import React, {PureComponent} from "react";
 import * as THREE from "three";
 import * as TrackballControls from "three-trackballcontrols";
-import { PLYLoader } from "./plyloader";
+import {PLYLoader} from "./plyloader";
 import BodyModel from '../../../models/BodyModel';
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
   state = {sliderValue: "0"};
 
-  componentDidMount() {
-    const width = this.chartContainer.current.clientWidth;
-    const height = 200;
-
-    // Add scene
+  initScene = () => {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xcccccc);
+  };
 
-    // Add camera
+  initCamera = () => {
+    const width = this.chartContainer.current.clientWidth;
+    // FIXME set properly
+    const height = 200;
+
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.set(200, 20, 200);
+  };
 
-    // Add renderer
+  initCanvas = () => {
+    const width = this.chartContainer.current.clientWidth;
+    // FIXME set properly
+    const height = 200;
+
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(width, height);
     // appending renderer as canvas
     this.chartContainer.current.appendChild(this.renderer.domElement);
+  };
 
+  initControls = () => {
     this.controls = new TrackballControls(
       this.camera,
       this.renderer.domElement
     );
     this.controls.addEventListener("change", this.renderScene);
+  };
 
-    console.log(this.controls);
-
-    //ADD CUBE
-    let geometry = new THREE.BoxGeometry(1, 1, 1);
-    let material = new THREE.MeshBasicMaterial({color: "#433F81"});
-    this.cube = new THREE.Mesh(geometry, material);
-    this.scene.add(this.cube);
-    this.start();
+  componentDidMount() {
+    // mandatory
+    this.initScene();
+    this.initCamera();
+    this.initCanvas();
+    this.initControls();
 
     // optional
     this.initAxis();
@@ -66,6 +73,8 @@ class BodyChart extends PureComponent {
 
       scene_.add(mesh);
     });
+
+    this.start();
   }
 
   componentWillUnmount() {
