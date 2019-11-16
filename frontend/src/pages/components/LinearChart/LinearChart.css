@@ -1,0 +1,28 @@
+.line {
+  fill: none;
+  stroke: #ffab00;
+  stroke-width: 3;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.dot {
+  fill: #ffab00;
+  stroke: #fff;
+}
+
+.linear-chart {
+  display: flex;
+}
+
+.linear-chart__title {
+  font-size: 26px;
+  text-align: center;
+}
+
+text {
+  font-size: 16px;
+}
