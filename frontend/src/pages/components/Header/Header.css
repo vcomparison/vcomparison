@@ -1,0 +1,32 @@
+.header__logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding-bottom: 2px;
+    font-size: 18px;
+    color: #000000;
+}
+
+.header__logo:hover {
+    color: #ffffff;
+}
+
+.header__links {
+    display: flex;
+    flex: 2;
+}
+
+.header__link {
+    display: flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 16px;
+    padding-bottom: 2px;
+    font-size: 14px;
+    color: #000000;
+}
+
+.header__link:hover {
+    color: #000000;
+    background: rgba(255, 255, 255, 0.4);
+}

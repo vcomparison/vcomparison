@@ -7,6 +7,7 @@ import VoxelChart from "./components/VoxelChart";
 import "./App.sass";
 import BodyChart from "./components/BodyChart";
 import CommentArea from "./components/CommentArea";
+import Header from "./components/Header";
 import Plans from "./Plans";
 
 class App extends PureComponent {
@@ -107,76 +108,89 @@ class App extends PureComponent {
   render() {
     const { layerValue, filters, options, isLoaded } = this.state;
     return (
-      <div className="container">
-        <Switch>
-          <Route path="/plans">
-            <Plans />
-          </Route>
-        </Switch>
-        {/* <Plans /> */}
-        <div className="row">
-          <div className="col-xs-5">
-            <div className="app__layer-slider-container">
-              <div className="app__layer-slider-label">Layer value</div>
-              <input
-                type="range"
-                min="-100"
-                max="150"
-                value={layerValue}
-                ref={this.layerSlider}
-                onChange={this.onLayerChange}
-              ></input>
-            </div>
-          </div>
-          <div className="col-xs-5">
-            {isLoaded && (
-              <div className="filters">
-                <Dropdown
-                  selection
-                  options={options.patients}
-                  value={filters.patients}
-                  onChange={this.onPatientChange}
-                />
-                {options.plans && (
-                  <Dropdown
-                    selection
-                    options={options.plans}
-                    value={filters.plans}
-                    onChange={this.onPlanChange}
-                  />
-                )}
-              </div>
-            )}
-          </div>
-          <div className="col-xs-2">
-            <div className="app__comment-title">Comment</div>
+      <div>
+        <div className="app__header-wrapper">
+          <div className="container">
+            <Header />
           </div>
         </div>
-        <div className="row">
-          <div className="col-xs-5">
-            <div className="app__block">
-              <BodyChart layerValue={layerValue} />
-            </div>
-          </div>
-          <div className="col-xs-5">
-            <div className="app__block">
-              <div>
-                <div
-                  style={
-                    options.plans && options.plans.length > 0
-                      ? { width: "394px" }
-                      : { width: 0 }
-                  }
-                >
-                  <canvas ref={this.canvas} width="394" height="394"></canvas>
+        <div className="app__page-content">
+          <div className="container">
+            <Switch>
+              <Route path="/plans">
+                <Plans />
+              </Route>
+            </Switch>
+            {/* <Plans /> */}
+            <div className="row">
+              <div className="col-xs-5">
+                <div className="app__layer-slider-container">
+                  <div className="app__layer-slider-label">Layer value</div>
+                  <input
+                    type="range"
+                    min="-100"
+                    max="150"
+                    value={layerValue}
+                    ref={this.layerSlider}
+                    onChange={this.onLayerChange}
+                  ></input>
                 </div>
-                {/* <VoxelChart /> */}
+              </div>
+              <div className="col-xs-5">
+                {isLoaded && (
+                  <div className="filters">
+                    <Dropdown
+                      selection
+                      options={options.patients}
+                      value={filters.patients}
+                      onChange={this.onPatientChange}
+                    />
+                    {options.plans && (
+                      <Dropdown
+                        selection
+                        options={options.plans}
+                        value={filters.plans}
+                        onChange={this.onPlanChange}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="col-xs-2">
+                <div className="app__comment-title">Comment</div>
               </div>
             </div>
-          </div>
-          <div className="col-xs-2">
-            <div className="app__block">
-              <CommentArea />
+            <div className="row">
+              <div className="col-xs-5">
+                <div className="app__block">
+                  <BodyChart layerValue={layerValue} />
+                </div>
+              </div>
+              <div className="col-xs-5">
+                <div className="app__block">
+                  <div>
+                    <div
+                      style={
+                        options.plans && options.plans.length > 0
+                          ? { width: "394px" }
+                          : { width: 0 }
+                      }
+                    >
+                      <canvas
+                        ref={this.canvas}
+                        width="394"
+                        height="394"
+                      ></canvas>
+                    </div>
+                    {/* <VoxelChart /> */}
+                  </div>
+                </div>
+              </div>
+              <div className="col-xs-2">
+                <div className="app__block">
+                  <CommentArea />
+                </div>
+              </div>
             </div>
           </div>
         </div>
