@@ -94,14 +94,33 @@ class BodyChart extends PureComponent {
 
   addTumor = (patientId, planId, isodoseMeshId) => {
     this.addModel(`${this.baseModelsUrl}/patients/${patientId}/plans/${planId}` +
-    `/isodose-meshes/${isodoseMeshId}`);
+      `/isodose-meshes/${isodoseMeshId}`);
   };
 
   addOrgan = (patientId, imageId, structureMeshId) => {
     this.addModel(`${this.baseModelsUrl}/patients/${patientId}/images/${imageId}` +
-    `/structure-meshes/${structureMeshId}`);
+      `/structure-meshes/${structureMeshId}`);
   };
 
+  // FIXME enable raycasting
+  // onMouseMove = (event) => {
+  //   // calculate mouse position in normalized device coordinates
+  //   // (-1 to +1) for both components
+  //   console.log('event: ', event.clientX, event.clientY);
+  //
+  //   this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  //   this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  //
+  //   console.log('mouse: ', this.mouse.x, this.mouse.y);
+  // };
+
+  onWindowResize = () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+  };
 
   componentDidMount() {
     const {layerValue} = this.props;
@@ -110,10 +129,16 @@ class BodyChart extends PureComponent {
     this.initScene();
     this.initCamera();
     this.initCanvas();
+    window.addEventListener('resize', this.onWindowResize, false);
     this.initControls();
-    this.loader = new PLYLoader();
 
-    // optional
+    this.loader = new PLYLoader();
+    // FIXME enable raycasting
+    // this.raycaster = new THREE.Raycaster();
+    // this.mouse = new THREE.Vector2();
+    // window.addEventListener('mousemove', this.onMouseMove, false);
+
+    // scene elements
     this.initAxis();
     this.initLight();
 
@@ -137,6 +162,8 @@ class BodyChart extends PureComponent {
 
     // draw affected area
     const planId = 'JSu-IM102';
+    // this.addTumor(patientId, planId, '73.500-Gy.ply');
+    // this.addTumor(patientId, planId, '70.000-Gy.ply');
     this.addTumor(patientId, planId, '35.000-Gy.ply');
 
     requestAnimationFrame(this.animate);
@@ -150,6 +177,24 @@ class BodyChart extends PureComponent {
   };
 
   renderScene = () => {
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+
+    // FIXME enable raycasting
+    // const intersects = this.raycaster.intersectObjects(this.scene.children);
+    //
+    // // all blue
+    // this.scene.children.forEach((child) => {
+    //   if (child.type === 'Mesh') {
+    //     child.material.color.set('rgb(0, 0, 220)');
+    //   }
+    // });
+    //
+    // // intersected is red
+    // // console.log('intersection : ' + intersects);
+    // for (let i = 0; i < intersects.length; i++) {
+    //   intersects[i].object.material.color.set(0xff0000);
+    // }
+
     this.renderer.render(this.scene, this.camera);
   };
 
