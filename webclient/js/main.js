@@ -46,6 +46,8 @@ function addFigure() {
         color: color,
         flatShading: true,
         side: THREE.DoubleSide,
+        // Transparent surfaces don't play well with the z-buffer,
+        // and as such must be manually sorted and rendered back-to-front
         opacity: opacity,
         transparent: true
       });
