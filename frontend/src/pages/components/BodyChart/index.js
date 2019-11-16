@@ -1,13 +1,13 @@
-import React, { PureComponent } from "react";
+import React, {PureComponent} from "react";
 import * as THREE from "three";
 import * as TrackballControls from "three-trackballcontrols";
-import { PLYLoader } from "./plyloader";
+import {PLYLoader} from "./plyloader";
 import BodyModel from "../../../models/BodyModel";
 import Slicer from "./Slicer";
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
-  state = { sliderValue: "0" };
+  state = {sliderValue: "0"};
 
   initScene = () => {
     this.scene = new THREE.Scene();
@@ -42,44 +42,29 @@ class BodyChart extends PureComponent {
     this.controls.addEventListener("change", this.renderScene);
   };
 
-  componentDidMount() {
-    const { layerValue } = this.props;
+  initAxis = () => {
+    const axesHelper = new THREE.AxesHelper(50);
+    this.scene.add(axesHelper);
+  };
 
-    // mandatory
-    this.initScene();
-    this.initCamera();
-    this.initCanvas();
-    this.initControls();
-    this.loader = new PLYLoader();
+  initLight = () => {
+    const light1 = new THREE.DirectionalLight(0xffffff);
+    light1.position.set(1, 1, 1);
+    this.scene.add(light1);
 
-    // optional
-    this.initAxis();
-    this.initLight();
-
-    // slice body into halves
-    // FIXME relative to body's origin position and size
-    this.slicer = new Slicer(230);
-    this.slicer.setX(10);
-    this.slicer.setY(-100);
-    this.slicer.setZ(layerValue);
-    this.slicer.draw(this.scene);
-
-    // draw body
-    this.addModel("cord.ply");
-    this.addModel("BrainStem.ply");
-    this.addModel("PTV56.ply");
-    this.addModel("Body.ply");
-
-    requestAnimationFrame(this.animate);
-  }
+    const light2 = new THREE.DirectionalLight(0xffffff);
+    light2.position.set(1, -1, 0);
+    this.scene.add(light2);
+  };
 
   componentDidUpdate(prevState, prevProps) {
     if (prevProps.layerValue !== this.props.layerValue)
       this.slicer.setZ(this.props.layerValue);
   }
 
-  addModel = modelName => {
-    this.loader.load(`http://localhost:5000/models/${modelName}`, geometry => {
+  addModel = (modelUrl) => {
+    console.log(`loading model from ${modelUrl}`);
+    this.loader.load(modelUrl, geometry => {
       geometry.computeVertexNormals();
 
       const color = new THREE.Color(0xffffff);
@@ -107,29 +92,55 @@ class BodyChart extends PureComponent {
     });
   };
 
-  componentWillUnmount() {
-    this.stop();
-    this.chartContainer.current.removeChild(this.renderer.domElement);
+  addTumor = (patientId, planId, isodoseMeshId) => {
+    this.addModel(`${this.baseModelsUrl}/patients/${patientId}/plans/${planId}` +
+    `/isodose-meshes/${isodoseMeshId}`);
+  };
+
+  addOrgan = (patientId, imageId, structureMeshId) => {
+    this.addModel(`${this.baseModelsUrl}/patients/${patientId}/images/${imageId}` +
+    `/structure-meshes/${structureMeshId}`);
+  };
+
+
+  componentDidMount() {
+    const {layerValue} = this.props;
+
+    // mandatory
+    this.initScene();
+    this.initCamera();
+    this.initCanvas();
+    this.initControls();
+    this.loader = new PLYLoader();
+
+    // optional
+    this.initAxis();
+    this.initLight();
+
+    this.baseModelsUrl = 'http://localhost:5000';
+
+    // slice body into halves
+    // FIXME relative to body's origin position and size
+    this.slicer = new Slicer(230);
+    this.slicer.setX(10);
+    this.slicer.setY(-100);
+    this.slicer.setZ(layerValue);
+    this.slicer.draw(this.scene);
+
+    // draw body
+    const patientId = 'Head_Neck';
+    const imageId = 'Study-1-Series-2-CT02';
+    this.addOrgan(patientId, imageId, "cord.ply");
+    // this.addOrgan(patientId, imageId, "BrainStem.ply");
+    // this.addOrgan(patientId, imageId, "PTV56.ply");
+    // this.addOrgan(patientId, imageId, "Body.ply");
+
+    // draw affected area
+    const planId = 'JSu-IM102';
+    this.addTumor(patientId, planId, '35.000-Gy.ply');
+
+    requestAnimationFrame(this.animate);
   }
-
-  stop = () => {
-    cancelAnimationFrame(this.frameId);
-  };
-
-  initAxis = () => {
-    const axesHelper = new THREE.AxesHelper(50);
-    this.scene.add(axesHelper);
-  };
-
-  initLight = () => {
-    const light1 = new THREE.DirectionalLight(0xffffff);
-    light1.position.set(1, 1, 1);
-    this.scene.add(light1);
-
-    const light2 = new THREE.DirectionalLight(0xffffff);
-    light2.position.set(1, -1, 0);
-    this.scene.add(light2);
-  };
 
   animate = () => {
     this.renderScene();
@@ -140,6 +151,15 @@ class BodyChart extends PureComponent {
 
   renderScene = () => {
     this.renderer.render(this.scene, this.camera);
+  };
+
+  componentWillUnmount() {
+    this.stop();
+    this.chartContainer.current.removeChild(this.renderer.domElement);
+  }
+
+  stop = () => {
+    cancelAnimationFrame(this.frameId);
   };
 
   render() {
