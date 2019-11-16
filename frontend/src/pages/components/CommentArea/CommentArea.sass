@@ -14,6 +14,11 @@
     height: 100%
     width: 100%
     box-sizing: border-box
+    background: #EEEEEE
+    z-index: 2
+    &__list
+        padding: 10px 10px
+        overflow-y: auto
     &__form
         background: lightgray
         padding: 8px
@@ -24,7 +29,7 @@
             background: #2185d0
         &--secondary
             @extend %button
-            background: darkgray
+            background: #2E3032
             margin-right: 4px
     &__textarea
         resize: none

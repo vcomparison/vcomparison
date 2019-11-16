@@ -55,6 +55,12 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+        'file-loader',
+        ],
       }
     ]
   },
@@ -69,7 +75,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: [".js", ".jsx", ".sass", ".css"]
+    extensions: [".js", ".jsx", ".sass", ".css", ".svg"]
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),
