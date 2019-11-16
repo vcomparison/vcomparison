@@ -32,6 +32,8 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "semantic-ui-react": "^0.88.1",
+    "three": "^0.110.0",
+    "three-ply-loader": "^1.0.0",
     "voxelizer": "^0.1.3"
   }
 }

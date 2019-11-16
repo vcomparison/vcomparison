@@ -4,6 +4,8 @@ import PlansModel from "../models/PlansModel";
 import PatientsModel from "../models/PatientsModel";
 import VoxelChart from "./components/VoxelChart";
 import "./App.sass";
+import BodyChart from "./components/BodyChart";
+import CommentArea from "./components/CommentArea";
 
 class App extends PureComponent {
   baseUrl = "https://junction-planreview.azurewebsites.net";
@@ -96,45 +98,59 @@ class App extends PureComponent {
     const { layerValue, filters, options, isLoaded } = this.state;
     return (
       <div className="container">
-        <div>
-          {isLoaded && (
-            <div className="filters">
-              <Dropdown
-                selection
-                options={options.patients}
-                value={filters.patients}
-                onChange={this.onPatientChange}
-              />
-              {options.plans && (
-                <Dropdown
-                  selection
-                  options={options.plans}
-                  value={filters.plans}
-                  onChange={this.onPlanChange}
-                />
-              )}
+        <div className="row">
+          <div className="col-xs-4">
+            <div className="app__block">{/* <BodyChart /> */}</div>
+          </div>
+          <div className="col-xs-4">
+            <div className="app__block">
+              <div>
+                {isLoaded && (
+                  <div className="filters">
+                    <Dropdown
+                      selection
+                      options={options.patients}
+                      value={filters.patients}
+                      onChange={this.onPatientChange}
+                    />
+                    {options.plans && (
+                      <Dropdown
+                        selection
+                        options={options.plans}
+                        value={filters.plans}
+                        onChange={this.onPlanChange}
+                      />
+                    )}
+                  </div>
+                )}
+                <div
+                  style={
+                    options.plans && options.plans.length > 0
+                      ? { width: "600px" }
+                      : { width: 0 }
+                  }
+                >
+                  <canvas ref={this.canvas} width="600" height="600"></canvas>
+                </div>
+                <div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    value={layerValue}
+                    ref={this.layerSlider}
+                    onChange={this.onLayerChange}
+                  ></input>
+                </div>
+                {/* <VoxelChart /> */}
+              </div>
             </div>
-          )}
-          <div
-            style={
-              options.plans && options.plans.length > 0
-                ? { width: "600px" }
-                : { width: 0 }
-            }
-          >
-            <canvas ref={this.canvas} width="600" height="600"></canvas>
           </div>
-          <div>
-            <input
-              type="range"
-              min="1"
-              max="100"
-              value={layerValue}
-              ref={this.layerSlider}
-              onChange={this.onLayerChange}
-            ></input>
+          <div className="col-xs-4">
+            <div className="app__block">
+              <CommentArea />
+            </div>
           </div>
-          {/* <VoxelChart /> */}
         </div>
       </div>
     );
