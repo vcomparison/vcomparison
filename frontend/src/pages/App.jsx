@@ -100,7 +100,9 @@ class App extends PureComponent {
       <div className="container">
         <div className="row">
           <div className="col-xs-4">
-            <div className="app__block">{/* <BodyChart /> */}</div>
+            <div className="app__block">
+              <BodyChart />
+            </div>
           </div>
           <div className="col-xs-4">
             <div className="app__block">

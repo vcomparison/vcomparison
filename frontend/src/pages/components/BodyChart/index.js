@@ -1,14 +1,15 @@
 import React, { PureComponent } from "react";
 import * as THREE from "three";
+import * as TrackballControls from "three-trackballcontrols";
 import * as PLYLoader from "three-ply-loader";
-
-let controls;
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
   state = { sliderValue: "0" };
 
   componentDidMount() {
+    const width = this.chartContainer.current.clientWidth;
+    const height = 200;
     // let loader = new THREE.PLYLoader();
 
     // Add scene
@@ -16,34 +17,35 @@ class BodyChart extends PureComponent {
     this.scene.background = new THREE.Color(0xcccccc);
 
     // Add camera
-    this.camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
+    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.set(200, 20, 200);
 
     // Add renderer
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(width, height);
     // appending renderer as canvas
     this.chartContainer.current.appendChild(this.renderer.domElement);
 
+    this.controls = new TrackballControls(
+      this.camera,
+      this.renderer.domElement
+    );
+    this.controls.addEventListener("change", this.renderScene);
+
+    console.log(this.controls);
+
     //ADD CUBE
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: "#433F81" });
+    let geometry = new THREE.BoxGeometry(1, 1, 1);
+    let material = new THREE.MeshBasicMaterial({ color: "#433F81" });
     this.cube = new THREE.Mesh(geometry, material);
     this.scene.add(this.cube);
     this.start();
-
-    // initControls();
 
     // optional
     this.initAxis();
     this.initLight();
 
-    this.animate();
+    // this.animate();
 
     // function addFigure() {
     //   const submitter = document.getElementsByClassName(
@@ -82,7 +84,7 @@ class BodyChart extends PureComponent {
 
   componentWillUnmount() {
     this.stop();
-    this.mount.removeChild(this.renderer.domElement);
+    this.chartContainer.current.removeChild(this.renderer.domElement);
   }
   start = () => {
     if (!this.frameId) {
@@ -92,19 +94,6 @@ class BodyChart extends PureComponent {
   stop = () => {
     cancelAnimationFrame(this.frameId);
   };
-  animate = () => {
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
-    this.renderScene();
-    this.frameId = window.requestAnimationFrame(this.animate);
-  };
-  renderScene = () => {
-    this.renderer.render(this.scene, this.camera);
-  };
-  //   initControls = () => {
-  //     controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-  //     controls.addEventListener("change", render);
-  //   };
 
   initAxis = () => {
     const axesHelper = new THREE.AxesHelper(50);
@@ -121,17 +110,16 @@ class BodyChart extends PureComponent {
     this.scene.add(light2);
   };
 
-  //   animate = () => {
-  //     // requestAnimationFrame(animate);
+  animate = () => {
+    this.renderScene();
+    this.frameId = requestAnimationFrame(this.animate);
 
-  //     // controls.update();
+    this.controls.update();
+  };
 
-  //     this.renderScene();
-  //   };
-
-  //   renderScene() {
-  //     this.renderer.render(this.scene, this.camera);
-  //   }
+  renderScene = () => {
+    this.renderer.render(this.scene, this.camera);
+  };
 
   toggleAngle = () => {};
 
