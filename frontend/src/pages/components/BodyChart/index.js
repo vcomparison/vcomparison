@@ -1,13 +1,13 @@
-import React, {PureComponent} from "react";
+import React, { PureComponent } from "react";
 import * as THREE from "three";
 import * as TrackballControls from "three-trackballcontrols";
-import {PLYLoader} from "./plyloader";
+import { PLYLoader } from "./plyloader";
 import BodyModel from "../../../models/BodyModel";
 import Slicer from "./Slicer";
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
-  state = {sliderValue: "0"};
+  state = { sliderValue: "0" };
 
   initScene = () => {
     this.scene = new THREE.Scene();
@@ -62,7 +62,7 @@ class BodyChart extends PureComponent {
       this.slicer.setZ(this.props.layerValue);
   }
 
-  addModel = (modelUrl) => {
+  addModel = modelUrl => {
     console.log(`loading model from ${modelUrl}`);
     this.loader.load(modelUrl, geometry => {
       geometry.computeVertexNormals();
@@ -93,13 +93,17 @@ class BodyChart extends PureComponent {
   };
 
   addTumor = (patientId, planId, isodoseMeshId) => {
-    this.addModel(`${this.baseModelsUrl}/patients/${patientId}/plans/${planId}` +
-      `/isodose-meshes/${isodoseMeshId}`);
+    this.addModel(
+      `${this.baseModelsUrl}/patients/${patientId}/plans/${planId}` +
+        `/isodose-meshes/${isodoseMeshId}`
+    );
   };
 
   addOrgan = (patientId, imageId, structureMeshId) => {
-    this.addModel(`${this.baseModelsUrl}/patients/${patientId}/images/${imageId}` +
-      `/structure-meshes/${structureMeshId}`);
+    this.addModel(
+      `${this.baseModelsUrl}/patients/${patientId}/images/${imageId}` +
+        `/structure-meshes/${structureMeshId}`
+    );
   };
 
   // FIXME enable raycasting
@@ -123,7 +127,7 @@ class BodyChart extends PureComponent {
   // };
 
   componentDidMount() {
-    const {layerValue} = this.props;
+    const { layerValue } = this.props;
 
     // mandatory
     this.initScene();
@@ -142,7 +146,7 @@ class BodyChart extends PureComponent {
     this.initAxis();
     this.initLight();
 
-    this.baseModelsUrl = 'http://localhost:5000';
+    this.baseModelsUrl = "http://localhost:5002";
 
     // slice body into halves
     // FIXME relative to body's origin position and size
@@ -153,18 +157,18 @@ class BodyChart extends PureComponent {
     this.slicer.draw(this.scene);
 
     // draw body
-    const patientId = 'Head_Neck';
-    const imageId = 'Study-1-Series-2-CT02';
+    const patientId = "Head_Neck";
+    const imageId = "Study-1-Series-2-CT02";
     this.addOrgan(patientId, imageId, "cord.ply");
     // this.addOrgan(patientId, imageId, "BrainStem.ply");
     // this.addOrgan(patientId, imageId, "PTV56.ply");
     // this.addOrgan(patientId, imageId, "Body.ply");
 
     // draw affected area
-    const planId = 'JSu-IM102';
+    const planId = "JSu-IM102";
     // this.addTumor(patientId, planId, '73.500-Gy.ply');
     // this.addTumor(patientId, planId, '70.000-Gy.ply');
-    this.addTumor(patientId, planId, '35.000-Gy.ply');
+    this.addTumor(patientId, planId, "35.000-Gy.ply");
 
     requestAnimationFrame(this.animate);
   }
