@@ -1,16 +1,16 @@
-import React, { PureComponent } from "react";
+import React, {PureComponent} from "react";
 import * as THREE from "three";
 import * as TrackballControls from "three-trackballcontrols";
-import * as PLYLoader from "three-ply-loader";
+import { PLYLoader } from "./plyloader";
+import BodyModel from '../../../models/BodyModel';
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
-  state = { sliderValue: "0" };
+  state = {sliderValue: "0"};
 
   componentDidMount() {
     const width = this.chartContainer.current.clientWidth;
     const height = 200;
-    // let loader = new THREE.PLYLoader();
 
     // Add scene
     this.scene = new THREE.Scene();
@@ -36,7 +36,7 @@ class BodyChart extends PureComponent {
 
     //ADD CUBE
     let geometry = new THREE.BoxGeometry(1, 1, 1);
-    let material = new THREE.MeshBasicMaterial({ color: "#433F81" });
+    let material = new THREE.MeshBasicMaterial({color: "#433F81"});
     this.cube = new THREE.Mesh(geometry, material);
     this.scene.add(this.cube);
     this.start();
@@ -45,47 +45,34 @@ class BodyChart extends PureComponent {
     this.initAxis();
     this.initLight();
 
-    // this.animate();
+    let loader = new PLYLoader();
 
-    // function addFigure() {
-    //   const submitter = document.getElementsByClassName(
-    //     "control-element__file"
-    //   )[0];
-    //   if (0 === submitter.files.length) {
-    //     console.log("Nothing to submit!");
-    //     return;
-    //   }
+    const scene_ = this.scene;
 
-    //   const file = submitter.files[0];
+    loader.load(`http://localhost:5000/models/Body.ply`, function (geometry) {
+      geometry.computeVertexNormals();
 
-    //   if (file) {
-    //     console.log(`loading file ${file.name}`);
+      const color = new THREE.Color(0xffffff);
+      color.setHex(Math.random() * 0xffffff);
 
-    //     loader.load("./js/models/" + file.name, function(geometry) {
-    //       geometry.computeVertexNormals();
+      const material = new THREE.MeshStandardMaterial({
+        color: color,
+        flatShading: true,
+        side: THREE.DoubleSide
+      });
+      const mesh = new THREE.Mesh(geometry, material);
 
-    //       const color = new THREE.Color(0xffffff);
-    //       color.setHex(Math.random() * 0xffffff);
+      mesh.rotateX(THREE.Math.degToRad(45));
 
-    //       const material = new THREE.MeshStandardMaterial({
-    //         color: color,
-    //         flatShading: true,
-    //         side: THREE.DoubleSide
-    //       });
-    //       const mesh = new THREE.Mesh(geometry, material);
-
-    //       mesh.rotateX(THREE.Math.degToRad(45));
-
-    //       this.scene.add(mesh);
-    //     });
-    //   }
-    // }
+      scene_.add(mesh);
+    });
   }
 
   componentWillUnmount() {
     this.stop();
     this.chartContainer.current.removeChild(this.renderer.domElement);
   }
+
   start = () => {
     if (!this.frameId) {
       this.frameId = requestAnimationFrame(this.animate);
@@ -121,10 +108,11 @@ class BodyChart extends PureComponent {
     this.renderer.render(this.scene, this.camera);
   };
 
-  toggleAngle = () => {};
+  toggleAngle = () => {
+  };
 
   render() {
-    const { sliderValue } = this.state;
+    const {sliderValue} = this.state;
     return (
       <div>
         <input
