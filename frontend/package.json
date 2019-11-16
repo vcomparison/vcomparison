@@ -33,6 +33,8 @@
     "nanoid": "^2.1.7",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
     "semantic-ui-react": "^0.88.1",
     "three": "^0.110.0",
     "three-ply-loader": "^1.0.0",

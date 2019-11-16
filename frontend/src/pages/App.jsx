@@ -1,11 +1,13 @@
 import React, { PureComponent, Fragment } from "react";
 import { Dropdown, Button } from "semantic-ui-react";
+import { Switch, Route } from "react-router";
 import PlansModel from "../models/PlansModel";
 import PatientsModel from "../models/PatientsModel";
 import VoxelChart from "./components/VoxelChart";
 import "./App.sass";
 import BodyChart from "./components/BodyChart";
 import CommentArea from "./components/CommentArea";
+import Plans from "./Plans";
 
 class App extends PureComponent {
   baseUrl = "https://junction-planreview.azurewebsites.net";
@@ -106,6 +108,12 @@ class App extends PureComponent {
     const { layerValue, filters, options, isLoaded } = this.state;
     return (
       <div className="container">
+        <Switch>
+          <Route path="/plans">
+            <Plans />
+          </Route>
+        </Switch>
+        {/* <Plans /> */}
         <div className="row">
           <div className="col-xs-5">
             <div className="app__layer-slider-container">
