@@ -1,11 +1,13 @@
 import React, { PureComponent } from "react";
-import { Checkbox, Table } from "semantic-ui-react";
+import { Button, Checkbox, Table } from "semantic-ui-react";
+import _isEmpty from "lodash/isEmpty";
 import PlansModel from "../../models/PlansModel";
 import PatientsModel from "../../models/PatientsModel";
 import "./Plans.css";
 
 class Plans extends PureComponent {
   state = {
+    comparingPlans: [],
     patients: [],
     plans: [],
     selectedPatient: "Lung",
@@ -35,26 +37,53 @@ class Plans extends PureComponent {
       .catch(() => this.setState({ isLoaded: true }));
   };
 
+  onPlanSelect = event => {
+    const { comparingPlans } = this.state;
+    const clickedPlanText = event.currentTarget.textContent;
+    if (comparingPlans.includes(clickedPlanText))
+      return this.setState({
+        comparingPlans: comparingPlans.filter(
+          planText => planText !== clickedPlanText
+        )
+      });
+    return this.setState({
+      comparingPlans: [...comparingPlans, clickedPlanText]
+    });
+  };
+
+  onComparePlan = () => {};
+
   render() {
-    const { plans } = this.state;
+    const { plans, comparingPlans } = this.state;
     return (
       <div>
+        <div>
+          <Button
+            onClick={this.onComparePlan}
+            disabled={_isEmpty(comparingPlans)}
+          >
+            Compare plans
+          </Button>
+        </div>
         <Table celled>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Plans</Table.HeaderCell>
-              <Table.HeaderCell>Header</Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {plans.map(plan => (
-              <Table.Row key={plan.value}>
+              <Table.Row
+                key={plan.value}
+                active={comparingPlans.includes(plan.value)}
+              >
                 <Table.Cell>
                   <Checkbox
-                    name="comparingPlan"
+                    name="comparingPlans"
                     label={plan.text}
                     className="plans__checkbox"
-                    onChange={() => {}}
+                    onChange={this.onPlanSelect}
                   />
                 </Table.Cell>
                 <Table.Cell>Cell</Table.Cell>
