@@ -121,6 +121,7 @@ class App extends PureComponent {
       isLoaded,
       isCommentBlockOpen
     } = this.state;
+    const currentMetadata = { layerValue, plan: filters.plans };
     return (
       <div>
         <div className="app__header-wrapper">
@@ -137,7 +138,7 @@ class App extends PureComponent {
             </Switch>
             {/* <Plans /> */}
             <div className="row">
-              <div className="col-xs-5">
+              <div className="col-xs-6">
                 <div className="app__layer-slider-container">
                   <div className="app__layer-slider-label">Layer value</div>
                   <input
@@ -150,7 +151,7 @@ class App extends PureComponent {
                   ></input>
                 </div>
               </div>
-              <div className="col-xs-5">
+              <div className="col-xs-6">
                 {isLoaded && (
                   <div className="filters">
                     <Dropdown
@@ -170,17 +171,14 @@ class App extends PureComponent {
                   </div>
                 )}
               </div>
-              <div className="col-xs-2">
-                <div className="app__comment-title">Comment</div>
-              </div>
             </div>
             <div className="row">
-              <div className="col-xs-5">
+              <div className="col-xs-6">
                 <div className="app__block">
                   <BodyChart layerValue={layerValue} />
                 </div>
               </div>
-              <div className="col-xs-5">
+              <div className="col-xs-6">
                 <div className="app__block">
                   <div>
                     <div
