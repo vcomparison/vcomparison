@@ -17,7 +17,7 @@ module.exports = {
         use: ["style-loader", MiniCssExtractPlugin.loader, "css-loader"]
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader"
@@ -72,5 +72,8 @@ module.exports = {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 3000
+  },
+  resolve: {
+      extensions: ['.js', '.jsx', '.sass', '.css']
   }
 };
