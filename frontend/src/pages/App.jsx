@@ -3,7 +3,7 @@ import { Dropdown } from "semantic-ui-react";
 import PlansModel from "../models/PlansModel";
 import PatientsModel from "../models/PatientsModel";
 import VoxelChart from "./components/VoxelChart";
-import "./App.css";
+import "./App.sass";
 
 class App extends PureComponent {
   baseUrl = "https://junction-planreview.azurewebsites.net";
