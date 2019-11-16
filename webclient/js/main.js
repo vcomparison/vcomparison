@@ -15,8 +15,6 @@ function toggleAngle() {
   const toggler = document.getElementById("control-element__ranger");
   const angleValue = toggler.value;
 
-  console.log(angleValue);
-
   if (0 !== figures.length) {
     figures[0].rotation.x = THREE.Math.degToRad(angleValue);
   }
@@ -40,10 +38,16 @@ function addFigure() {
       const color = new THREE.Color(0xffffff);
       color.setHex(Math.random() * 0xffffff);
 
+      const opacityMin = 0.3;
+      const opacityMax = 0.8;
+      const opacity = (Math.random() * (opacityMax - opacityMin) + opacityMin).toFixed(4);
+
       const material = new THREE.MeshStandardMaterial({
         color: color,
         flatShading: true,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
+        opacity: opacity,
+        transparent: true
       });
       const mesh = new THREE.Mesh(geometry, material);
 
