@@ -114,13 +114,13 @@ class BodyChart extends PureComponent {
   //   console.log('mouse: ', this.mouse.x, this.mouse.y);
   // };
 
-  onWindowResize = () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-  };
+  // onWindowResize = () => {
+  //   camera.aspect = window.innerWidth / window.innerHeight;
+  //   camera.updateProjectionMatrix();
+  //
+  //   this.renderer.setSize(window.innerWidth, window.innerHeight);
+  //
+  // };
 
   componentDidMount() {
     const {layerValue} = this.props;
@@ -129,7 +129,7 @@ class BodyChart extends PureComponent {
     this.initScene();
     this.initCamera();
     this.initCanvas();
-    window.addEventListener('resize', this.onWindowResize, false);
+    // window.addEventListener('resize', this.onWindowResize, false);
     this.initControls();
 
     this.loader = new PLYLoader();
