@@ -121,44 +121,44 @@ class BodyChart extends PureComponent {
     this.initAxis();
     this.initLight();
 
-    // this.baseModelsUrl = 'http://35.180.103.209:5000';
-
-    // slice body into halves
-    // FIXME relative to body's origin position and size
-    const slicer = new Slicer(330);
-    slicer.setX(10);
-    slicer.setY(-100);
-    slicer.setZ(layerValue);
-    slicer.draw(this.scene);
-    this.slicer = slicer;
-
-    // draw body
-    const patientId = "Head_Neck";
-    const imageId = "Study-1-Series-2-CT02";
-
-    // Head_Neck
-    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord');
-    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem');
-    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Body');
-    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56');
-
-    // Lung
-    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Spinal-cord');
-    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-right');
-    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-left');
-    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-GTV');
-    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Heart');
-    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Body');
-
+    this.drawPatient('Lung');
 
     // draw affected area
-    const planId = "JSu-IM102";
     // this.addTumor(patientId, planId, '73.500-Gy.ply');
     // this.addTumor(patientId, planId, '70.000-Gy.ply');
     // this.addTumor(patientId, planId, '35.000-Gy.ply');
 
     requestAnimationFrame(this.animate);
   }
+
+  drawPatient = (patientId, layerValue) => {
+    if (patientId === 'Head_Neck') {
+      this.slicer = new Slicer(370);
+      this.slicer.setX(10);
+      this.slicer.setY(-100);
+      this.slicer.setZ(layerValue);
+      this.slicer.draw(this.scene);
+
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Body');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56');
+
+    } else if (patientId === 'Lung') {
+      this.slicer = new Slicer(400);
+      this.slicer.setX(0);
+      this.slicer.setY(0);
+      this.slicer.setZ(layerValue);
+      this.slicer.draw(this.scene);
+
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Spinal-cord');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-right');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-left');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-GTV');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Heart');
+      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Body');
+    }
+  };
 
   animate = () => {
     this.renderScene();
