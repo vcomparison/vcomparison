@@ -113,7 +113,7 @@ class CommentArea extends PureComponent {
                 className="comment-area__button--secondary"
                 onClick={this.onCommentCancel}
               >
-                Cancel comment
+                Cancel
               </button>
             </div>
           </Form>

@@ -187,11 +187,11 @@ class App extends PureComponent {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="col-xs-2">
-            <div className="app__block">
-              <CommentArea currentMetadata={currentMetadata}/>
+              <div className="col-xs-2">
+                  <div className="app__block">
+                      <CommentArea currentMetadata={currentMetadata}/>
+                  </div>
+              </div>
             </div>
           </div>
         </div>
