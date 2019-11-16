@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
-const isDevelopment = process.env.NODE_ENV === 'development'
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 module.exports = {
   entry: "./src/index.js",
@@ -23,36 +23,36 @@ module.exports = {
           loader: "babel-loader"
         }
       },
+      {
+        test: /\.module\.s(a|c)ss$/,
+        loader: [
+            isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
         {
-          test: /\.module\.s(a|c)ss$/,
-          loader: [
-              isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-          {
-             loader: 'css-loader',
-                options: {
-                  modules: true,
-                  sourceMap: isDevelopment
-                }
-          },
+         loader: 'css-loader',
+          options: {
+            modules: true,
+            sourceMap: isDevelopment
+          }
+        },
+        {
+          loader: 'sass-loader',
+            options: {
+              sourceMap: isDevelopment
+          }
+        }
+      ]
+    },
+    {
+      test: /\.s(a|c)ss$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        loader: [
+          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
           {
             loader: 'sass-loader',
-                options: {
-                  sourceMap: isDevelopment
-                }
-          }
-        ]
-      },
-      {
-        test: /\.s(a|c)ss$/,
-            exclude: /\.module.(s(a|c)ss)$/,
-            loader: [
-              isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-              'css-loader',
-              {
-                loader: 'sass-loader',
-                options: {
-                  sourceMap: isDevelopment
-                }
+            options: {
+              sourceMap: isDevelopment
+            }
           }
         ]
       }
@@ -72,8 +72,5 @@ module.exports = {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 3000
-  },
-  resolve: {
-      extensions: ['.js', 'css', '.sass']
   }
 };
