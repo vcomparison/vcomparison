@@ -136,10 +136,20 @@ class BodyChart extends PureComponent {
     const patientId = "Head_Neck";
     const imageId = "Study-1-Series-2-CT02";
 
+    // Head_Neck
     this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord');
     this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem');
     this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Body');
     this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56');
+
+    // Lung
+    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Spinal-cord');
+    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-right');
+    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-left');
+    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-GTV');
+    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Heart');
+    // this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Body');
+
 
     // draw affected area
     const planId = "JSu-IM102";
