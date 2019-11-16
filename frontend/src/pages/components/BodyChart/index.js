@@ -16,7 +16,7 @@ class BodyChart extends PureComponent {
   initCamera = () => {
     const width = this.chartContainer.current.clientWidth;
     // FIXME set properly
-    const height = 200;
+    const height = 300;
 
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.set(200, 20, 200);
@@ -25,7 +25,7 @@ class BodyChart extends PureComponent {
   initCanvas = () => {
     const width = this.chartContainer.current.clientWidth;
     // FIXME set properly
-    const height = 200;
+    const height = 300;
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(width, height);
@@ -47,16 +47,26 @@ class BodyChart extends PureComponent {
     this.initCamera();
     this.initCanvas();
     this.initControls();
+    this.loader = new PLYLoader();
 
     // optional
     this.initAxis();
     this.initLight();
 
 
-    this.objects = [];
+    // draw body
+    this.addModel('cord.ply');
+    this.addModel('BrainStem.ply');
+    this.addModel('PTV56.ply');
+    this.addModel('Body.ply');
 
-    let loader = new PLYLoader();
-    loader.load(`http://localhost:5000/models/Body.ply`, (geometry) => {
+
+    requestAnimationFrame(this.animate);
+  }
+
+
+  addModel = (modelName) => {
+    this.loader.load(`http://localhost:5000/models/${modelName}`, (geometry) => {
       geometry.computeVertexNormals();
 
       const color = new THREE.Color(0xffffff);
@@ -78,59 +88,14 @@ class BodyChart extends PureComponent {
       const mesh = new THREE.Mesh(geometry, material);
 
       this.scene.add(mesh);
-
-
-      loader.load(`http://localhost:5000/models/cord.ply`, (geometry) => {
-        geometry.computeVertexNormals();
-
-        const color = new THREE.Color(0xffffff);
-        color.setHex(Math.random() * 0xffffff);
-
-        const material = new THREE.MeshStandardMaterial({
-          color: color,
-          flatShading: true,
-        });
-        const mesh = new THREE.Mesh(geometry, material);
-
-        this.scene.add(mesh);
-      });
-
     });
-
-
-    requestAnimationFrame(this.animate);
-  }
+  };
 
   componentWillUnmount() {
     this.stop();
     this.chartContainer.current.removeChild(this.renderer.domElement);
   }
 
-
-  renderObjects = () => {
-    console.log('waiting');
-
-
-    setTimeout(() => {
-      console.log(`drawing ${this.objects.length}`);
-
-      this.objects.forEach(mesh => {
-        console.log('adding to scene');
-        setTimeout(() => {
-          this.scene.add(mesh);
-        }, 2000);
-
-      })
-
-
-    }, 2000);
-  };
-  //
-  // start = () => {
-  //   if (!this.frameId) {
-  //     this.frameId = requestAnimationFrame(this.animate);
-  //   }
-  // };
   stop = () => {
     cancelAnimationFrame(this.frameId);
   };
