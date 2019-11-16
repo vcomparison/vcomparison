@@ -1,7 +1,7 @@
 How to launch "backend":
 
 ```bash
-cd backend
+cd backend-old
 python3 backend.py 5000
 ```
 
