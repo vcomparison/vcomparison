@@ -52,11 +52,11 @@ class BodyChart extends PureComponent {
     this.initAxis();
     this.initLight();
 
+
+    this.objects = [];
+
     let loader = new PLYLoader();
-
-    const scene_ = this.scene;
-
-    loader.load(`http://localhost:5000/models/Body.ply`, function (geometry) {
+    loader.load(`http://localhost:5000/models/Body.ply`, (geometry) => {
       geometry.computeVertexNormals();
 
       const color = new THREE.Color(0xffffff);
@@ -77,10 +77,28 @@ class BodyChart extends PureComponent {
       });
       const mesh = new THREE.Mesh(geometry, material);
 
-      scene_.add(mesh);
+      this.scene.add(mesh);
+
+
+      loader.load(`http://localhost:5000/models/cord.ply`, (geometry) => {
+        geometry.computeVertexNormals();
+
+        const color = new THREE.Color(0xffffff);
+        color.setHex(Math.random() * 0xffffff);
+
+        const material = new THREE.MeshStandardMaterial({
+          color: color,
+          flatShading: true,
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+
+        this.scene.add(mesh);
+      });
+
     });
 
-    this.start();
+
+    requestAnimationFrame(this.animate);
   }
 
   componentWillUnmount() {
@@ -88,11 +106,31 @@ class BodyChart extends PureComponent {
     this.chartContainer.current.removeChild(this.renderer.domElement);
   }
 
-  start = () => {
-    if (!this.frameId) {
-      this.frameId = requestAnimationFrame(this.animate);
-    }
+
+  renderObjects = () => {
+    console.log('waiting');
+
+
+    setTimeout(() => {
+      console.log(`drawing ${this.objects.length}`);
+
+      this.objects.forEach(mesh => {
+        console.log('adding to scene');
+        setTimeout(() => {
+          this.scene.add(mesh);
+        }, 2000);
+
+      })
+
+
+    }, 2000);
   };
+  //
+  // start = () => {
+  //   if (!this.frameId) {
+  //     this.frameId = requestAnimationFrame(this.animate);
+  //   }
+  // };
   stop = () => {
     cancelAnimationFrame(this.frameId);
   };
