@@ -107,6 +107,7 @@ class App extends PureComponent {
 
   render() {
     const { layerValue, filters, options, isLoaded } = this.state;
+    const currentMetadata = { layerValue, plan: filters.plans };
     return (
       <div>
         <div className="app__header-wrapper">
@@ -188,9 +189,11 @@ class App extends PureComponent {
               </div>
             </div>
           </div>
-        </div>
-        <div className="app__comment-block">
-          <CommentArea />
+          <div className="col-xs-2">
+            <div className="app__block">
+              <CommentArea currentMetadata={currentMetadata}/>
+            </div>
+          </div>
         </div>
       </div>
     );

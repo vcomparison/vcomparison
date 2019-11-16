@@ -12,13 +12,20 @@ class CommentArea extends PureComponent {
       {
         id: nanoid(),
         message: "We need to know how to treat",
-        date: "10.10.2017"
+        date: "10.10.2017",
+        author: 'John Doe',
+        metadata: {},
+        isMetadataPinned: false
       },
       {
         id: nanoid(),
         message: "Control our treatment process",
-        date: "11.10.2017"
+        date: "11.10.2017",
+        author: 'John Doe',
+        metadata: {},
+        isMetadataPinned: false
       }
+
     ],
     comment: {
       commentText: ""
@@ -31,6 +38,20 @@ class CommentArea extends PureComponent {
     this.setState({ comment: { ...comment, commentText: value } });
   };
 
+  onMetadataPinned = commentId => {
+    const newCommentsList = [...this.state.commentsList];
+    const indexToUpdate = this.state.commentsList.findIndex(comment => comment.id === commentId);
+    newCommentsList.splice(indexToUpdate, 1, { ...newCommentsList[indexToUpdate], isMetadataPinned: false } );
+    this.setState({ commentsList: newCommentsList });
+  };
+
+    onMetadataDetached = commentId => {
+        const newCommentsList = [...this.state.commentsList];
+        const indexToUpdate = this.state.commentsList.findIndex(comment => comment.id === commentId);
+        newCommentsList.splice(indexToUpdate, 1, { ...newCommentsList[indexToUpdate], isMetadataPinned: true } );
+        this.setState({ commentsList: newCommentsList });
+    };
+
   onSendComment = ({ target }) => {
     const {
       commentsList,
@@ -39,10 +60,18 @@ class CommentArea extends PureComponent {
     this.setState({
       commentsList: [
         ...commentsList,
-        { id: nanoid(), message: commentText, date: getCurrentDate() }
+        {
+          id: nanoid(),
+          message: commentText,
+          date: getCurrentDate(),
+          author: 'me',
+          metadata: this.props.currentMetadata
+        }
       ],
+      isCommentAreaShown: false,
       comment: { commentText: "" }
     });
+
   };
 
   onCommentStart = e => {
@@ -61,9 +90,13 @@ class CommentArea extends PureComponent {
     } = this.state;
     return (
       <div className="comment-area">
-        <div>
+        <div className="comment-area__list">
           {commentsList.map(comment => (
-            <Comment key={comment.id} comment={comment}></Comment>
+            <Comment key={comment.id}
+                     comment={comment}
+                     onPinned={this.onMetadataPinned}
+                     onDetached={this.onMetadataDetached}>
+            </Comment>
           ))}
         </div>
         {isCommentAreaShown ? (
