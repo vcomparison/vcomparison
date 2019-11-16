@@ -186,13 +186,11 @@ class App extends PureComponent {
                   </div>
                 </div>
               </div>
-              <div className="col-xs-2">
-                <div className="app__block">
-                  <CommentArea />
-                </div>
-              </div>
             </div>
           </div>
+        </div>
+        <div className="app__comment-block">
+          <CommentArea />
         </div>
       </div>
     );
