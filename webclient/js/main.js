@@ -3,11 +3,23 @@ let camera;
 let controls;
 let renderer;
 let loader = new THREE.PLYLoader();
+let figures = [];
 
 
 function initCamera() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(200, 20, 200);
+}
+
+function toggleAngle() {
+  const toggler = document.getElementById("control-element__ranger");
+  const angleValue = toggler.value;
+
+  console.log(angleValue);
+
+  if (0 !== figures.length) {
+    figures[0].rotation.x = THREE.Math.degToRad(angleValue);
+  }
 }
 
 function addFigure() {
@@ -25,8 +37,8 @@ function addFigure() {
     loader.load('./js/models/' + file.name, function (geometry) {
       geometry.computeVertexNormals();
 
-      const color = new THREE.Color( 0xffffff );
-      color.setHex( Math.random() * 0xffffff );
+      const color = new THREE.Color(0xffffff);
+      color.setHex(Math.random() * 0xffffff);
 
       const material = new THREE.MeshStandardMaterial({
         color: color,
@@ -35,8 +47,7 @@ function addFigure() {
       });
       const mesh = new THREE.Mesh(geometry, material);
 
-      mesh.rotateX(THREE.Math.degToRad(45));
-
+      figures.push(mesh);
       scene.add(mesh);
     });
   }
@@ -94,11 +105,14 @@ function animate() {
 
   controls.update();
 
+
   render();
 }
 
 function render() {
   renderer.render(scene, camera);
+
+  // toggleAngle();
 }
 
 
