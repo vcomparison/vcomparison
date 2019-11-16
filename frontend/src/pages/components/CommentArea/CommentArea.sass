@@ -1,3 +1,12 @@
+%button
+    color: white
+    border: none
+    padding: 10px
+    border-radius: 5px
+    margin: 8px 0 0 0
+    float: right
+    outline: none
+
 .comment-area
     display: flex
     flex-direction: column
@@ -10,13 +19,13 @@
         padding: 8px
         //max-height: 50px
     &__button
-        background: #2185d0
-        color: white
-        border: none
-        padding: 10px
-        border-radius: 5px
-        margin: 8px 0 0 4px
-        float: right
+        &--primary
+            @extend %button
+            background: #2185d0
+        &--secondary
+            @extend %button
+            background: darkgray
+            margin-right: 4px
     &__textarea
         resize: none
 
