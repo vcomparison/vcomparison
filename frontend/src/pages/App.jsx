@@ -100,8 +100,18 @@ class App extends PureComponent {
       <div className="container">
         <div className="row">
           <div className="col-xs-4">
+            <div>
+              <input
+                type="range"
+                min="-100"
+                max="150"
+                value={layerValue}
+                ref={this.layerSlider}
+                onChange={this.onLayerChange}
+              ></input>
+            </div>
             <div className="app__block">
-              <BodyChart />
+              <BodyChart layerValue={layerValue} />
             </div>
           </div>
           <div className="col-xs-4">
@@ -133,16 +143,6 @@ class App extends PureComponent {
                   }
                 >
                   <canvas ref={this.canvas} width="600" height="600"></canvas>
-                </div>
-                <div>
-                  <input
-                    type="range"
-                    min="1"
-                    max="100"
-                    value={layerValue}
-                    ref={this.layerSlider}
-                    onChange={this.onLayerChange}
-                  ></input>
                 </div>
                 {/* <VoxelChart /> */}
               </div>

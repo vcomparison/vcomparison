@@ -1,13 +1,13 @@
-import React, {PureComponent} from "react";
+import React, { PureComponent } from "react";
 import * as THREE from "three";
 import * as TrackballControls from "three-trackballcontrols";
-import {PLYLoader} from "./plyloader";
-import BodyModel from '../../../models/BodyModel';
+import { PLYLoader } from "./plyloader";
+import BodyModel from "../../../models/BodyModel";
 import Slicer from "./Slicer";
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
-  state = {sliderValue: "0"};
+  state = { sliderValue: "0" };
 
   initScene = () => {
     this.scene = new THREE.Scene();
@@ -43,6 +43,8 @@ class BodyChart extends PureComponent {
   };
 
   componentDidMount() {
+    const { layerValue } = this.props;
+
     // mandatory
     this.initScene();
     this.initCamera();
@@ -54,26 +56,30 @@ class BodyChart extends PureComponent {
     this.initAxis();
     this.initLight();
 
-
     // slice body into halves
     // FIXME relative to body's origin position and size
     this.slicer = new Slicer(230);
     this.slicer.setX(10);
     this.slicer.setY(-100);
-    this.slicer.setZ(50);
+    this.slicer.setZ(layerValue);
     this.slicer.draw(this.scene);
 
     // draw body
-    this.addModel('cord.ply');
-    this.addModel('BrainStem.ply');
-    this.addModel('PTV56.ply');
-    this.addModel('Body.ply');
+    this.addModel("cord.ply");
+    this.addModel("BrainStem.ply");
+    this.addModel("PTV56.ply");
+    this.addModel("Body.ply");
 
     requestAnimationFrame(this.animate);
   }
 
-  addModel = (modelName) => {
-    this.loader.load(`http://localhost:5000/models/${modelName}`, (geometry) => {
+  componentDidUpdate(prevState, prevProps) {
+    if (prevProps.layerValue !== this.props.layerValue)
+      this.slicer.setZ(this.props.layerValue);
+  }
+
+  addModel = modelName => {
+    this.loader.load(`http://localhost:5000/models/${modelName}`, geometry => {
       geometry.computeVertexNormals();
 
       const color = new THREE.Color(0xffffff);
@@ -81,7 +87,10 @@ class BodyChart extends PureComponent {
 
       const opacityMin = 0.3;
       const opacityMax = 0.8;
-      const opacity = (Math.random() * (opacityMax - opacityMin) + opacityMin).toFixed(4);
+      const opacity = (
+        Math.random() * (opacityMax - opacityMin) +
+        opacityMin
+      ).toFixed(4);
 
       const material = new THREE.MeshStandardMaterial({
         color: color,
@@ -134,19 +143,8 @@ class BodyChart extends PureComponent {
   };
 
   render() {
-    const {sliderValue} = this.state;
     return (
       <div>
-        <input
-          type="range"
-          min="-100"
-          max="150"
-          step="10"
-          value={sliderValue}
-          onChange={(e) => {
-            this.slicer.setZ(e.target.value)
-          }}
-        ></input>
         <div ref={this.chartContainer}></div>
       </div>
     );
