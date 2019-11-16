@@ -62,14 +62,20 @@ class BodyChart extends PureComponent {
       const color = new THREE.Color(0xffffff);
       color.setHex(Math.random() * 0xffffff);
 
+      const opacityMin = 0.3;
+      const opacityMax = 0.8;
+      const opacity = (Math.random() * (opacityMax - opacityMin) + opacityMin).toFixed(4);
+
       const material = new THREE.MeshStandardMaterial({
         color: color,
         flatShading: true,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
+        // Transparent surfaces don't play well with the z-buffer,
+        // and as such must be manually sorted and rendered back-to-front
+        opacity: opacity,
+        transparent: true
       });
       const mesh = new THREE.Mesh(geometry, material);
-
-      mesh.rotateX(THREE.Math.degToRad(45));
 
       scene_.add(mesh);
     });
