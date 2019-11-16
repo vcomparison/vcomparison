@@ -21,7 +21,7 @@ class BodyChart extends PureComponent {
     const height = 394;
 
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    this.camera.position.set(0, -350, 150);
+    this.camera.position.set(0, -410, 170);
     this.camera.lookAt(new THREE.Vector3(0,0,0));
   };
 
@@ -121,7 +121,7 @@ class BodyChart extends PureComponent {
     this.initAxis();
     this.initLight();
 
-    this.baseModelsUrl = 'http://35.180.103.209:5000';
+    // this.baseModelsUrl = 'http://35.180.103.209:5000';
 
     // slice body into halves
     // FIXME relative to body's origin position and size
@@ -135,10 +135,11 @@ class BodyChart extends PureComponent {
     // draw body
     const patientId = "Head_Neck";
     const imageId = "Study-1-Series-2-CT02";
-    this.addOrgan(patientId, imageId, "cord.ply");
-    this.addOrgan(patientId, imageId, "BrainStem.ply");
-    this.addOrgan(patientId, imageId, "PTV56.ply");
-    this.addOrgan(patientId, imageId, "Body.ply");
+
+    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord');
+    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem');
+    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Body');
+    this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56');
 
     // draw affected area
     const planId = "JSu-IM102";
