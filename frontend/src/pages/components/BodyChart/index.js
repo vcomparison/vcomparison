@@ -1,13 +1,14 @@
-import React, { PureComponent } from "react";
+import React, {PureComponent} from "react";
 import * as THREE from "three";
 import * as TrackballControls from "three-trackballcontrols";
-import { PLYLoader } from "./plyloader";
+import {PLYLoader} from "./plyloader";
 import BodyModel from "../../../models/BodyModel";
 import Slicer from "./Slicer";
+// import Model from "./Model";
 
 class BodyChart extends PureComponent {
   chartContainer = React.createRef();
-  state = { sliderValue: "0" };
+  state = {sliderValue: "0"};
 
   initScene = () => {
     this.scene = new THREE.Scene();
@@ -20,7 +21,8 @@ class BodyChart extends PureComponent {
     const height = 394;
 
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    this.camera.position.set(200, 20, 200);
+    this.camera.position.set(0, -350, 150);
+    this.camera.lookAt(new THREE.Vector3(0,0,0));
   };
 
   initCanvas = () => {
@@ -87,7 +89,6 @@ class BodyChart extends PureComponent {
         transparent: true
       });
       const mesh = new THREE.Mesh(geometry, material);
-
       this.scene.add(mesh);
     });
   };
@@ -106,26 +107,6 @@ class BodyChart extends PureComponent {
     );
   };
 
-  // FIXME enable raycasting
-  // onMouseMove = (event) => {
-  //   // calculate mouse position in normalized device coordinates
-  //   // (-1 to +1) for both components
-  //   console.log('event: ', event.clientX, event.clientY);
-  //
-  //   this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  //   this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  //
-  //   console.log('mouse: ', this.mouse.x, this.mouse.y);
-  // };
-
-  // onWindowResize = () => {
-  //   camera.aspect = window.innerWidth / window.innerHeight;
-  //   camera.updateProjectionMatrix();
-  //
-  //   this.renderer.setSize(window.innerWidth, window.innerHeight);
-  //
-  // };
-
   componentDidMount() {
     const { layerValue } = this.props;
 
@@ -133,42 +114,37 @@ class BodyChart extends PureComponent {
     this.initScene();
     this.initCamera();
     this.initCanvas();
-    // window.addEventListener('resize', this.onWindowResize, false);
     this.initControls();
-
     this.loader = new PLYLoader();
-    // FIXME enable raycasting
-    // this.raycaster = new THREE.Raycaster();
-    // this.mouse = new THREE.Vector2();
-    // window.addEventListener('mousemove', this.onMouseMove, false);
 
     // scene elements
     this.initAxis();
     this.initLight();
 
-    this.baseModelsUrl = "http://localhost:5002";
+    this.baseModelsUrl = 'http://35.180.103.209:5000';
 
     // slice body into halves
     // FIXME relative to body's origin position and size
-    this.slicer = new Slicer(230);
-    this.slicer.setX(10);
-    this.slicer.setY(-100);
-    this.slicer.setZ(layerValue);
-    this.slicer.draw(this.scene);
+    const slicer = new Slicer(330);
+    slicer.setX(10);
+    slicer.setY(-100);
+    slicer.setZ(layerValue);
+    slicer.draw(this.scene);
+    this.slicer = slicer;
 
     // draw body
     const patientId = "Head_Neck";
     const imageId = "Study-1-Series-2-CT02";
     this.addOrgan(patientId, imageId, "cord.ply");
-    // this.addOrgan(patientId, imageId, "BrainStem.ply");
-    // this.addOrgan(patientId, imageId, "PTV56.ply");
-    // this.addOrgan(patientId, imageId, "Body.ply");
+    this.addOrgan(patientId, imageId, "BrainStem.ply");
+    this.addOrgan(patientId, imageId, "PTV56.ply");
+    this.addOrgan(patientId, imageId, "Body.ply");
 
     // draw affected area
     const planId = "JSu-IM102";
     // this.addTumor(patientId, planId, '73.500-Gy.ply');
     // this.addTumor(patientId, planId, '70.000-Gy.ply');
-    this.addTumor(patientId, planId, "35.000-Gy.ply");
+    // this.addTumor(patientId, planId, '35.000-Gy.ply');
 
     requestAnimationFrame(this.animate);
   }
@@ -181,24 +157,6 @@ class BodyChart extends PureComponent {
   };
 
   renderScene = () => {
-    // this.raycaster.setFromCamera(this.mouse, this.camera);
-
-    // FIXME enable raycasting
-    // const intersects = this.raycaster.intersectObjects(this.scene.children);
-    //
-    // // all blue
-    // this.scene.children.forEach((child) => {
-    //   if (child.type === 'Mesh') {
-    //     child.material.color.set('rgb(0, 0, 220)');
-    //   }
-    // });
-    //
-    // // intersected is red
-    // // console.log('intersection : ' + intersects);
-    // for (let i = 0; i < intersects.length; i++) {
-    //   intersects[i].object.material.color.set(0xff0000);
-    // }
-
     this.renderer.render(this.scene, this.camera);
   };
 

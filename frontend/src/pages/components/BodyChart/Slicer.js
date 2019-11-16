@@ -16,7 +16,22 @@ export default class Slicer {
     });
 
     this.plane = new THREE.Mesh(geometry, material);
+    // this.rotateOverY(THREE.Math.degToRad(180));
+    // this.rotateOverZ(THREE.Math.degToRad(180));
+    // this.rotateOverX(THREE.Math.degToRad(90));
   }
+
+  rotateOverX = (degree) => {
+    this.plane.rotateX(THREE.Math.degToRad(degree));
+  };
+
+  rotateOverY = (degree) => {
+    this.plane.rotateY(THREE.Math.degToRad(degree));
+  };
+
+  rotateOverZ = (degree) => {
+    this.plane.rotateZ(THREE.Math.degToRad(degree));
+  };
 
   setX = (value) => {
     this.plane.position.x = value;
