@@ -118,11 +118,9 @@ class BodyChart extends PureComponent {
   }
 
   drawPatient = (patientId, layerValue) => {
-    console.log(`current: ${this.currentPatientId}. new: ${patientId}`);
+    // TODO layer value is not defined here
+    console.log(`current: ${this.currentPatientId}. new: ${patientId}, layer-value: ${layerValue}`);
     const bodyColor = "rgb(237, 171, 135)";
-    if (!layerValue) {
-      return;
-    }
 
     if (patientId !== this.currentPatientId) {
       console.log(`drawing ${patientId}`);
@@ -139,16 +137,8 @@ class BodyChart extends PureComponent {
         this.slicer = new Slicer(370);
         this.slicer.setX(10);
         this.slicer.setY(-100);
-        this.slicer.setZ(layerValue);
+        this.slicer.setZ(0);
         this.slicer.draw(this.scene);
-
-        // add cancer
-        this.addModel(
-          "https://junction-planreview.azurewebsites.net/api/" +
-          "patients/Head_Neck/plans/JSu-IM101/isodose-meshes/35.000-Gy",
-          "rgb(255, 0, 0)",
-          0.9
-        );
 
         // add organs
         this.addModel(
@@ -157,6 +147,7 @@ class BodyChart extends PureComponent {
           bodyColor,
           0
         );
+
         this.addModel(
           "https://junction-planreview.azurewebsites.net/api/" +
           "patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem",
@@ -167,6 +158,13 @@ class BodyChart extends PureComponent {
           "https://junction-planreview.azurewebsites.net/api/" +
           "patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56",
           "rgb(0,0,0)",
+          0.9
+        );
+        // add cancer
+        this.addModel(
+          "https://junction-planreview.azurewebsites.net/api/" +
+          "patients/Head_Neck/plans/JSu-IM101/isodose-meshes/35.000-Gy",
+          "rgb(255, 0, 0)",
           0.9
         );
         this.addModel(
@@ -183,7 +181,7 @@ class BodyChart extends PureComponent {
         this.slicer = new Slicer(400);
         this.slicer.setX(0);
         this.slicer.setY(0);
-        this.slicer.setZ(layerValue);
+        this.slicer.setZ(0);
         this.slicer.draw(this.scene);
 
         // add organs
@@ -239,7 +237,7 @@ class BodyChart extends PureComponent {
       // figures are the same
     } else {
 
-      console.log(`Z value: ${layerValue}`);
+
       this.slicer.setZ(layerValue);
     }
   };
