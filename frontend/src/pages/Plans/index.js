@@ -11,6 +11,7 @@ class Plans extends PureComponent {
     patients: [],
     plans: [],
     selectedPatient: "Lung",
+    viewMode: "table",
     isLoaded: false
   };
 
@@ -53,8 +54,10 @@ class Plans extends PureComponent {
 
   onComparePlan = () => {};
 
+  onViewMode = viewMode => this.setState({ viewMode });
+
   render() {
-    const { plans, comparingPlans } = this.state;
+    const { plans, comparingPlans, viewMode } = this.state;
     return (
       <div>
         <div>
@@ -64,33 +67,51 @@ class Plans extends PureComponent {
           >
             Compare plans
           </Button>
+          <button type="button" onClick={() => this.onViewMode("table")}>
+            Table view
+          </button>
+          <button type="button" onClick={() => this.onViewMode("details")}>
+            Details view
+          </button>
         </div>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Plans</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {plans.map(plan => (
-              <Table.Row
-                key={plan.value}
-                active={comparingPlans.includes(plan.value)}
-              >
-                <Table.Cell>
-                  <Checkbox
-                    name="comparingPlans"
-                    label={plan.text}
-                    className="plans__checkbox"
-                    onChange={this.onPlanSelect}
-                  />
-                </Table.Cell>
-                <Table.Cell>Cell</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <div
+          className={`plans__overview ${viewMode === "table" &&
+            "plans__overview--table"}`}
+        >
+          <div>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Plans</Table.HeaderCell>
+                  {viewMode === "table" && (
+                    <Table.HeaderCell></Table.HeaderCell>
+                  )}
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {plans.map(plan => (
+                  <Table.Row
+                    key={plan.value}
+                    active={comparingPlans.includes(plan.value)}
+                  >
+                    <Table.Cell>
+                      <Checkbox
+                        name="comparingPlans"
+                        label={plan.text}
+                        className="plans__checkbox"
+                        onChange={this.onPlanSelect}
+                      />
+                    </Table.Cell>
+                    {viewMode === "table" && <Table.Cell>Cell</Table.Cell>}
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </div>
+          {viewMode === "details" && (
+            <div className="plans__report">For details</div>
+          )}
+        </div>
       </div>
     );
   }

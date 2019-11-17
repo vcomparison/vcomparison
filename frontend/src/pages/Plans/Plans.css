@@ -1,0 +1,11 @@
+.plans__overview {
+    display: flex;
+}
+
+.plans__overview--table {
+    display: block;
+}
+
+.plans__report {
+    flex: 12;
+}
