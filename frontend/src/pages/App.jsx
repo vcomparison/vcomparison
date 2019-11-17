@@ -6,6 +6,7 @@ import Views from "./Views";
 import Plans from "./Plans";
 import Comparison from "./Comparison";
 import "./App.sass";
+import ReportTable from "./components/ReportTable";
 
 class App extends PureComponent {
   state = {

@@ -8,4 +8,10 @@ export default class PlansModel {
       .get(`${baseUrl}/api/patients/${patientId}`)
       .then(({ data }) => data);
   }
+
+    static getPlan(patientId, planId) {
+        return axios
+            .get(`${baseUrl}/api/patients/${patientId}/plans/${planId}`)
+            .then(({ data }) => data);
+    }
 }

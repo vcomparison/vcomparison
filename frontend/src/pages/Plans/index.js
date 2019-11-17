@@ -3,6 +3,7 @@ import { Button, Checkbox, Dropdown, Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import PlansModel from "../../models/PlansModel";
 import PatientsModel from "../../models/PatientsModel";
+import ReportTable from "../components/ReportTable";
 import "./Plans.sass";
 
 class Plans extends PureComponent {
@@ -10,6 +11,10 @@ class Plans extends PureComponent {
     selectedPlan: "",
     patients: [],
     plans: [],
+    detailedPlan: {
+      Beams: []
+    },
+    detailedPatient: {},
     selectedPatient: "Lung",
     viewMode: "table",
     isLoaded: false
@@ -39,7 +44,8 @@ class Plans extends PureComponent {
   };
 
   onPlanSelect = event => {
-    this.setState({ selectedPlan: event.currentTarget.textContent });
+    const { selectedPatient } = this.state;
+    this.setState({ selectedPlan: event.currentTarget.textContent }, () => this.fetchDetailedPlan(event.currentTarget.textContent, selectedPatient));
   };
 
   onPatientChange = ({ target }) => {
@@ -49,16 +55,24 @@ class Plans extends PureComponent {
 
   onComparePlan = () => {};
 
-  onViewMode = viewMode => this.setState({ viewMode });
+  fetchDetailedPlan = () => {
+    const { selectedPlan, selectedPatient } = this.state;
+    PlansModel.getPlan(selectedPatient, selectedPlan).then(value => this.setState({ detailedPlan: value }));
+  };
+
+  onViewMode = viewMode =>
+    this.setState({ viewMode });
 
   render() {
     const {
       plans,
       patients,
       selectedPlan,
+      detailedPlan,
       selectedPatient,
       viewMode
     } = this.state;
+    console.log(detailedPlan['Beams'], 'PLAN');
     return (
       <div>
         <div className="plans__link-wrapper">
@@ -117,7 +131,9 @@ class Plans extends PureComponent {
             </Table>
           </div>
           {viewMode === "details" && (
-            <div className="plans__report">For details</div>
+            <div className="plans__report">
+                <ReportTable fields={detailedPlan['Beams']} />
+            </div>
           )}
         </div>
       </div>
