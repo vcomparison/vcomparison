@@ -1,7 +1,14 @@
 import React, { PureComponent } from "react";
 
 const comparison = {
-  Lung: ["Lung_Heart", "Lung_PTV_63", "Lung_Spinal_Cord"]
+  Lung: [
+    "Lung_Heart",
+    "Lung_PTV_63",
+    "Lung_Spinal_Cord",
+    "Dose/MaxDose",
+    "Dose/MinDose",
+    "Dose/MeanDose"
+  ]
 };
 
 class Comparison extends PureComponent {

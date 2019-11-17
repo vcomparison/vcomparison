@@ -1,5 +1,10 @@
 h2.views__title {
-    margin-top: 10px;
+    margin-top: 24px;
     font-size: 24px;
     text-align: center;
+}
+
+.views__dvh-chart {
+    display: flex;
+    justify-content: center;
 }
