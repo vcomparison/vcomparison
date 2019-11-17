@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
-import { Button, Checkbox, Table } from "semantic-ui-react";
+import {Button, Checkbox, Dropdown, Table} from "semantic-ui-react";
 import _isEmpty from "lodash/isEmpty";
 import PlansModel from "../../models/PlansModel";
 import PatientsModel from "../../models/PatientsModel";
-import "./Plans.css";
+import "./Plans.sass";
 
 class Plans extends PureComponent {
   state = {
@@ -52,12 +52,17 @@ class Plans extends PureComponent {
     });
   };
 
+  onPatientChange = ({ target }) => {
+    const value = target.textContent;
+    this.setState({ selectedPatient: value }, () => this.fetchPlans());
+  };
+
   onComparePlan = () => {};
 
   onViewMode = viewMode => this.setState({ viewMode });
 
   render() {
-    const { plans, comparingPlans, viewMode } = this.state;
+    const { plans, patients, comparingPlans, selectedPatient, viewMode } = this.state;
     return (
       <div>
         <div>
@@ -67,13 +72,23 @@ class Plans extends PureComponent {
           >
             Compare plans
           </Button>
-          <button type="button" onClick={() => this.onViewMode("table")}>
-            Table view
-          </button>
-          <button type="button" onClick={() => this.onViewMode("details")}>
-            Details view
-          </button>
         </div>
+          <div className="plans__patient-dropdown">
+            <Dropdown
+              selection
+              options={patients}
+              value={selectedPatient}
+              onChange={this.onPatientChange}
+            />
+              <div>
+                  <Button onClick={() => this.onViewMode("table")}>
+                      Table view
+                  </Button>
+                  <Button onClick={() => this.onViewMode("details")}>
+                      Details view
+                  </Button>
+              </div>
+          </div>
         <div
           className={`plans__overview ${viewMode === "table" &&
             "plans__overview--table"}`}

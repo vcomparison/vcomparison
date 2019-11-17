@@ -35,9 +35,9 @@ class App extends PureComponent {
         <div className="app__page-content">
           <div className="container">
             <Switch>
-              <Route path="/views" render={() => <Views onMetadataChange={this.onMetadataChange} />}></Route>
-              <Route path="/plans" render={() => <Plans />}></Route>
-              <Redirect from="/" to="/views" />
+              <Route exact path="/views" render={() => <Views onMetadataChange={this.onMetadataChange} />}></Route>
+              <Route exact path="/plans" render={() => <Plans />}></Route>
+              <Redirect to="/views" />
             </Switch>
           </div>
         </div>
