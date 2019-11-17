@@ -3,3 +3,8 @@ h2.views__title {
     font-size: 24px;
     text-align: center;
 }
+
+.views__dvh-chart {
+    display: flex;
+    justify-content: center;
+}

@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
-import { Button, Checkbox, Table } from "semantic-ui-react";
+import { Button, Checkbox, Dropdown, Table } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import _isEmpty from "lodash/isEmpty";
 import PlansModel from "../../models/PlansModel";
 import PatientsModel from "../../models/PatientsModel";
 import "./Plans.sass";
@@ -63,7 +62,13 @@ class Plans extends PureComponent {
   onViewMode = viewMode => this.setState({ viewMode });
 
   render() {
-    const { plans, patients, comparingPlans, selectedPatient, viewMode } = this.state;
+    const {
+      plans,
+      patients,
+      comparingPlans,
+      selectedPatient,
+      viewMode
+    } = this.state;
     return (
       <div>
         <div>
@@ -77,22 +82,20 @@ class Plans extends PureComponent {
             Details view
           </button>
         </div>
-          <div className="plans__patient-dropdown">
-            <Dropdown
-              selection
-              options={patients}
-              value={selectedPatient}
-              onChange={this.onPatientChange}
-            />
-              <div>
-                  <Button onClick={() => this.onViewMode("table")}>
-                      Table view
-                  </Button>
-                  <Button onClick={() => this.onViewMode("details")}>
-                      Details view
-                  </Button>
-              </div>
+        <div className="plans__patient-dropdown">
+          <Dropdown
+            selection
+            options={patients}
+            value={selectedPatient}
+            onChange={this.onPatientChange}
+          />
+          <div>
+            <Button onClick={() => this.onViewMode("table")}>Table view</Button>
+            <Button onClick={() => this.onViewMode("details")}>
+              Details view
+            </Button>
           </div>
+        </div>
         <div
           className={`plans__overview ${viewMode === "table" &&
             "plans__overview--table"}`}

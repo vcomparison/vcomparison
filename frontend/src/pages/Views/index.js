@@ -176,11 +176,13 @@ class Views extends PureComponent {
           <div className="row">
             <div className="col-xs-12">
               <h2 className="views__title">Dose-volume histogram (DVH)</h2>
-              <img
-                width="100%"
-                alt="DVH"
-                src={`http://35.180.103.209/patients/${filters.patients}/plans/${filters.plans}.png`}
-              ></img>
+              <div className="views__dvh-chart">
+                <img
+                  width="50%"
+                  alt="DVH"
+                  src={`http://35.180.103.209/patients/${filters.patients}/plans/${filters.plans}.png`}
+                ></img>
+              </div>
             </div>
           </div>
         )}
