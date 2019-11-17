@@ -7,7 +7,7 @@ const Comment = ({ comment }) => {
         <div className={comment.author === 'Doctor' ? "comment__mine" : "comment__their"}>
             <div className="comment__header">
                 <p className="comment__author">{comment.author}</p>
-                <p>{comment.date}</p>
+                <p className="comment__date">{comment.date}</p>
             </div>
             <div className="comment__text">{comment.message}</div>
             <div className="comment__footer">
