@@ -154,7 +154,7 @@ class Views extends PureComponent {
         <div className="row">
           <div className="col-xs-6">
             <div className="app__block">
-              <BodyChart layerValue={layerValue} />
+              <BodyChart layerValue={layerValue} patientId={filters.patients} />
             </div>
           </div>
           <div className="col-xs-6">
