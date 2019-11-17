@@ -55,11 +55,14 @@ class Views extends PureComponent {
   };
 
   onPlanChange = ({ target }) => {
-    const { filters } = this.state;
+    const { filters, layerValue } = this.state;
+    const { onMetadataChange } = this.props;
     const planId = target.textContent;
     if (filters.plans === planId) return null;
-    this.setState({ filters: { ...filters, plans: planId } }, () =>
-      this.loadImageToCanvas()
+    this.setState({ filters: { ...filters, plans: planId } }, () => {
+      this.loadImageToCanvas();
+      onMetadataChange(filters.patients, planId, layerValue);
+    }
     );
   };
 
@@ -83,11 +86,18 @@ class Views extends PureComponent {
   };
 
   onLayerChange = ({ target: { value } }) => {
-    this.setState({ layerValue: value }, () => this.loadImageToCanvas());
+    const { filters } = this.state;
+    const { onMetadataChange } = this.props;
+    this.setState({ layerValue: value }, () => {
+      this.loadImageToCanvas();
+      onMetadataChange(filters.patients, filters.plans, value)
+    }
+  );
   };
 
   onPatientChange = ({ target }) => {
-    const { filters, options } = this.state;
+    const { filters, options, layerValue } = this.state;
+    const { onMetadataChange } = this.props;
     const value = target.textContent;
     if (filters.patients === value) return null;
     this.setState(
@@ -95,7 +105,10 @@ class Views extends PureComponent {
         filters: { patients: value, plans: null },
         options: { ...options, plans: [] }
       },
-      () => this.fetchPlans()
+      () => {
+        this.fetchPlans();
+        onMetadataChange(filters.patients, filters.plans, layerValue)
+      }
     );
   };
 

@@ -8,7 +8,8 @@ import "./App.sass";
 
 class App extends PureComponent {
   state = {
-    isCommentBlockOpen: false
+    isCommentBlockOpen: false,
+    currentMetadata: { patient: '', plan: '', layerValue: '' }
   };
 
   onToggleComment = () => {
@@ -18,8 +19,12 @@ class App extends PureComponent {
     });
   };
 
+  onMetadataChange = (patient, plan, layerValue) => {
+    this.setState({ currentMetadata: { patient, plan, layerValue } });
+  };
+
   render() {
-    const { isCommentBlockOpen } = this.state;
+    const { isCommentBlockOpen, currentMetadata } = this.state;
     return (
       <div>
         <div className="app__header-wrapper">
@@ -30,7 +35,7 @@ class App extends PureComponent {
         <div className="app__page-content">
           <div className="container">
             <Switch>
-              <Route path="/views" render={() => <Views />}></Route>
+              <Route path="/views" render={() => <Views onMetadataChange={this.onMetadataChange} />}></Route>
               <Route path="/plans" render={() => <Plans />}></Route>
               <Redirect from="/" to="/views" />
             </Switch>
@@ -41,7 +46,7 @@ class App extends PureComponent {
             isCommentBlockOpen ? "app__comment-block--opened" : ""
           }`}
         >
-          <CommentArea />
+          <CommentArea currentMetadata={currentMetadata} />
           <div onClick={this.onToggleComment} className="app__comment-icon">
             Comments
           </div>

@@ -46,8 +46,29 @@ $their-message-color: lightgrey
   &__metadata-info
     display: flex
     width: 100%
-    //padding: 3px
     justify-content: space-between
+  &__metadata
+    color: #2185d0
+    text-decoration: underline
+  &__tooltip
+    position: relative
+    //display: inline-block
+    border-bottom: 1px dotted black
+  &__tooltip-text
+    width: 120px
+    background-color: black
+    color: #fff
+    text-align: center
+    padding: 5px 0
+    border-radius: 6px
+    position: absolute
+    z-index: 4
+    bottom: 110%
+    right: 240px
+    margin-left: -60px
+  &__metadata-item
+    width: 100%
+    float: left
   &__attach-metadata-icon
     @extend %icon
     background: url("./icons/pinned-icon.svg") no-repeat

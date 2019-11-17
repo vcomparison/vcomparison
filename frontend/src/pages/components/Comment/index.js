@@ -1,37 +1,46 @@
 import React, { useState, Fragment } from "react";
 import "./Comment.sass";
 
-const Comment = ({ comment, onPinned, onDetached }) => {
-    const [isPinningClicked, setIsPinningClicked] = useState(false);
-    const onPinMetadata = () => {
-        setIsPinningClicked(true);
-        onPinned(comment.id)
-    };
-    const onDetachMetadata = () => {
-        setIsPinningClicked(false);
-        onDetached(comment.id)
-    };
+const Comment = ({ comment }) => {
+    const [isHovered, setIsHovered] = useState(false);
     return (
-        <div className={comment.author === 'me' ? "comment__mine" : "comment__their"}>
+        <div className={comment.author === 'Doctor' ? "comment__mine" : "comment__their"}>
             <div className="comment__header">
                 <p>{comment.author}</p>
                 <p>{comment.date}</p>
             </div>
             <div className="comment__text">{comment.message}</div>
             <div className="comment__footer">
-                { comment.author === 'me' &&
+                { comment.author === 'Doctor' &&
                 <Fragment>
                     {
-                        isPinningClicked ?
+                        comment.isMetadataPinned ?
                             <div className="comment__metadata-info">
-                                <a>#meta</a>
-                                <div title="Remove metadata" className="comment__attach-metadata-icon" onClick={onDetachMetadata}/>
+                                <div className="comment__metadata"
+                                     onMouseLeave={() => setIsHovered(false)}
+                                     onMouseEnter={() => setIsHovered(true)}>
+                                    #meta
+                                </div>
+                                <div title="Metadata added" className="comment__attach-metadata-icon" />
                             </div>
                             :
-                            <div title="Save metadata" className="comment__detach-metadata-icon" onClick={onPinMetadata}/>
+                            <div title="There is no metadata" className="comment__detach-metadata-icon" />
                     }
-                </Fragment>}
-
+                </Fragment>
+                }
+                {isHovered &&
+                    <Fragment>
+                        <div onMouseLeave={() => setIsHovered(false)}
+                             onMouseEnter={() => setIsHovered(true)}
+                             className="comment__tooltip">
+                            <div className="comment__tooltip-text">
+                                <div className="comment__metadata-item">{comment.metadata.patient}</div>
+                                <div className="comment__metadata-item">{comment.metadata.plan}</div>
+                                <div className="comment__metadata-item">{comment.metadata.layerValue}</div>
+                            </div>
+                        </div>
+                    </Fragment>
+                }
             </div>
         </div>
     )
