@@ -4,12 +4,13 @@ import CommentArea from "./components/CommentArea";
 import Header from "./components/Header";
 import Views from "./Views";
 import Plans from "./Plans";
+import Comparison from "./Comparison";
 import "./App.sass";
 
 class App extends PureComponent {
   state = {
     isCommentBlockOpen: false,
-    currentMetadata: { patient: '', plan: '', layerValue: '' }
+    currentMetadata: { patient: "", plan: "", layerValue: "" }
   };
 
   onToggleComment = () => {
@@ -35,9 +36,15 @@ class App extends PureComponent {
         <div className="app__page-content">
           <div className="container">
             <Switch>
-              <Route exact path="/views" render={() => <Views onMetadataChange={this.onMetadataChange} />}></Route>
-              <Route exact path="/plans" render={() => <Plans />}></Route>
-              <Redirect to="/views" />
+              <Route
+                path="/views"
+                render={() => (
+                  <Views onMetadataChange={this.onMetadataChange} />
+                )}
+              ></Route>
+              <Route path="/plans" render={() => <Plans />}></Route>
+              <Route path="/comparison" render={() => <Comparison />}></Route>
+              <Redirect from="/" to="/views" />
             </Switch>
           </div>
         </div>

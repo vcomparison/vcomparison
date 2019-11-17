@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
-import {Button, Checkbox, Dropdown, Table} from "semantic-ui-react";
+import { Button, Checkbox, Table } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import _isEmpty from "lodash/isEmpty";
 import PlansModel from "../../models/PlansModel";
 import PatientsModel from "../../models/PatientsModel";
@@ -66,12 +67,15 @@ class Plans extends PureComponent {
     return (
       <div>
         <div>
-          <Button
-            onClick={this.onComparePlan}
-            disabled={_isEmpty(comparingPlans)}
-          >
-            Compare plans
-          </Button>
+          <Link to="/comparison">
+            <Button onClick={this.onComparePlan}>Compare plans</Button>
+          </Link>
+          <button type="button" onClick={() => this.onViewMode("table")}>
+            Table view
+          </button>
+          <button type="button" onClick={() => this.onViewMode("details")}>
+            Details view
+          </button>
         </div>
           <div className="plans__patient-dropdown">
             <Dropdown
