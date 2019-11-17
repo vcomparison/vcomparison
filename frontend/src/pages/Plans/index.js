@@ -7,7 +7,7 @@ import "./Plans.sass";
 
 class Plans extends PureComponent {
   state = {
-    comparingPlans: [],
+    selectedPlan: "",
     patients: [],
     plans: [],
     selectedPatient: "Lung",
@@ -39,17 +39,7 @@ class Plans extends PureComponent {
   };
 
   onPlanSelect = event => {
-    const { comparingPlans } = this.state;
-    const clickedPlanText = event.currentTarget.textContent;
-    if (comparingPlans.includes(clickedPlanText))
-      return this.setState({
-        comparingPlans: comparingPlans.filter(
-          planText => planText !== clickedPlanText
-        )
-      });
-    return this.setState({
-      comparingPlans: [...comparingPlans, clickedPlanText]
-    });
+    this.setState({ selectedPlan: event.currentTarget.textContent });
   };
 
   onPatientChange = ({ target }) => {
@@ -65,7 +55,7 @@ class Plans extends PureComponent {
     const {
       plans,
       patients,
-      comparingPlans,
+      selectedPlan,
       selectedPatient,
       viewMode
     } = this.state;
@@ -114,14 +104,16 @@ class Plans extends PureComponent {
                 {plans.map(plan => (
                   <Table.Row
                     key={plan.value}
-                    active={comparingPlans.includes(plan.value)}
+                    active={selectedPlan === plan.value}
                   >
                     <Table.Cell>
                       <Checkbox
-                        name="comparingPlans"
+                        radio
+                        name="selectedPlan"
                         label={plan.text}
                         className="plans__checkbox"
                         onChange={this.onPlanSelect}
+                        checked={selectedPlan === plan.value}
                       />
                     </Table.Cell>
                     {viewMode === "table" && <Table.Cell>Cell</Table.Cell>}
