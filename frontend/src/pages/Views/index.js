@@ -13,7 +13,8 @@ class Views extends PureComponent {
   state = {
     layerValue: "1",
     filters: {
-      patients: "Lung"
+      patients: "Lung",
+      plans: "JSu-IM102"
     },
     options: {},
     isLoaded: false,
@@ -116,38 +117,45 @@ class Views extends PureComponent {
     return (
       <Fragment>
         <div className="row">
-          <div className="col-xs-6">
-            <div className="app__layer-slider-container">
-              <div className="app__layer-slider-label">Layer value</div>
-              <input
-                type="range"
-                min="-100"
-                max="150"
-                value={layerValue}
-                ref={this.layerSlider}
-                onChange={this.onLayerChange}
-              ></input>
-            </div>
-          </div>
-          <div className="col-xs-6">
-            {isLoaded && (
-              <div className="filters">
-                <Dropdown
-                  selection
-                  options={options.patients}
-                  value={filters.patients}
-                  onChange={this.onPatientChange}
-                />
-                {options.plans && (
-                  <Dropdown
-                    selection
-                    options={options.plans}
-                    value={filters.plans}
-                    onChange={this.onPlanChange}
-                  />
-                )}
+          <div className="col-xs-12">
+            <div className="filters">
+              <div className="app__layer-slider-container">
+                <div className="app__label">Layer value</div>
+                <input
+                  type="range"
+                  className="views__input-range"
+                  min="-100"
+                  max="150"
+                  value={layerValue}
+                  ref={this.layerSlider}
+                  onChange={this.onLayerChange}
+                ></input>
               </div>
-            )}
+              {isLoaded && (
+                <Fragment>
+                  <div>
+                    <div className="app__label">Patient</div>
+                    <Dropdown
+                      selection
+                      options={options.patients}
+                      value={filters.patients}
+                      onChange={this.onPatientChange}
+                    />
+                  </div>
+                  {options.plans && (
+                    <div>
+                      <div className="app__label">Plan</div>
+                      <Dropdown
+                        selection
+                        options={options.plans}
+                        value={filters.plans}
+                        onChange={this.onPlanChange}
+                      />
+                    </div>
+                  )}
+                </Fragment>
+              )}
+            </div>
           </div>
         </div>
         <div className="row">

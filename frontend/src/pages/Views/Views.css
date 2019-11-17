@@ -8,3 +8,7 @@ h2.views__title {
     display: flex;
     justify-content: center;
 }
+
+.views__input-range {
+    margin-top: 10px
+}
