@@ -122,8 +122,14 @@ class BodyChart extends PureComponent {
   drawPatient = (patientId, layerValue) => {
     const bodyColor = 'rgb(237, 171, 135)';
 
+    while(this.scene.children.length > 0){
+      this.scene.remove(this.scene.children[0]);
+    }
+    this.initAxis();
+    this.initLight();
 
     if (patientId === 'Head_Neck') {
+
       this.slicer = new Slicer(370);
       this.slicer.setX(10);
       this.slicer.setY(-100);
@@ -137,15 +143,16 @@ class BodyChart extends PureComponent {
 
       // add organs
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
-        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord', 'rgb(245, 227, 225)', 0);
+        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord', bodyColor, 0);
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
-        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem', 'rgb(240, 196, 86)', 0);
+        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem', bodyColor, 0);
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
         'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56', 'rgb(0,0,0)', 0.9);
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
         'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Body', bodyColor, 0.4);
 
     } else if (patientId === 'Lung') {
+
       this.slicer = new Slicer(400);
       this.slicer.setX(0);
       this.slicer.setY(0);
@@ -154,7 +161,7 @@ class BodyChart extends PureComponent {
 
       // add organs
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
-        'patients/Lung/images/1622-Series-CT01/structure-meshes/Spinal-cord', 'rgb(245, 227, 225)', 0);
+        'patients/Lung/images/1622-Series-CT01/structure-meshes/Spinal-cord', bodyColor, 0);
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
         'patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-right', 'rgb(135, 188, 204)', 0.7);
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
@@ -186,11 +193,7 @@ class BodyChart extends PureComponent {
   renderScene = () => {
     this.renderer.render(this.scene, this.camera);
 
-    while(this.scene.children.length > 0){
-      this.scene.remove(this.scene.children[0]);
-    }
-    this.initAxis();
-    this.initLight();
+
   };
 
   componentWillUnmount() {
