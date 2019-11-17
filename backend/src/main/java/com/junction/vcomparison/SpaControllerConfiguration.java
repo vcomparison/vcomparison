@@ -16,6 +16,7 @@ public class SpaControllerConfiguration extends WebMvcConfigurerAdapter {
 
     @GetMapping(value = {
             "/plans/**",
+            "/comparison/**",
             "/views/**",
     }, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView returnSpaBundle() {
