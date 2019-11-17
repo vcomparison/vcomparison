@@ -1,0 +1,16 @@
+h2.comparison__title {
+    margin-top: 24px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.comparison__images {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.comparison__image {
+    margin-bottom: 20px;
+}
