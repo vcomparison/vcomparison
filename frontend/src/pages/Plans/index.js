@@ -61,16 +61,10 @@ class Plans extends PureComponent {
     } = this.state;
     return (
       <div>
-        <div>
+        <div className="plans__link-wrapper">
           <Link to="/comparison">
             <Button onClick={this.onComparePlan}>Compare plans</Button>
           </Link>
-          <button type="button" onClick={() => this.onViewMode("table")}>
-            Table view
-          </button>
-          <button type="button" onClick={() => this.onViewMode("details")}>
-            Details view
-          </button>
         </div>
         <div className="plans__patient-dropdown">
           <Dropdown
