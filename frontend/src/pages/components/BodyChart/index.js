@@ -4,6 +4,7 @@ import * as TrackballControls from "three-trackballcontrols";
 import {PLYLoader} from "./plyloader";
 import BodyModel from "../../../models/BodyModel";
 import Slicer from "./Slicer";
+
 // import Model from "./Model";
 
 class BodyChart extends PureComponent {
@@ -22,7 +23,7 @@ class BodyChart extends PureComponent {
 
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.set(0, -410, 170);
-    this.camera.lookAt(new THREE.Vector3(0,0,0));
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
   };
 
   initCanvas = () => {
@@ -64,23 +65,13 @@ class BodyChart extends PureComponent {
       this.slicer.setZ(this.props.layerValue);
   }
 
-  addModel = modelUrl => {
+  addModel = (modelUrl, colorStr, opacity) => {
     console.log(`loading model from ${modelUrl}`);
     this.loader.load(modelUrl, geometry => {
       geometry.computeVertexNormals();
 
-      const color = new THREE.Color(0xffffff);
-      color.setHex(Math.random() * 0xffffff);
-
-      const opacityMin = 0.3;
-      const opacityMax = 0.8;
-      const opacity = (
-        Math.random() * (opacityMax - opacityMin) +
-        opacityMin
-      ).toFixed(4);
-
       const material = new THREE.MeshStandardMaterial({
-        color: color,
+        color: new THREE.Color(colorStr),
         flatShading: true,
         side: THREE.DoubleSide,
         // Transparent surfaces don't play well with the z-buffer,
@@ -96,19 +87,19 @@ class BodyChart extends PureComponent {
   addTumor = (patientId, planId, isodoseMeshId) => {
     this.addModel(
       `${this.baseModelsUrl}/patients/${patientId}/plans/${planId}` +
-        `/isodose-meshes/${isodoseMeshId}`
+      `/isodose-meshes/${isodoseMeshId}`
     );
   };
 
   addOrgan = (patientId, imageId, structureMeshId) => {
     this.addModel(
       `${this.baseModelsUrl}/patients/${patientId}/images/${imageId}` +
-        `/structure-meshes/${structureMeshId}`
+      `/structure-meshes/${structureMeshId}`
     );
   };
 
   componentDidMount() {
-    const { layerValue } = this.props;
+    const {layerValue} = this.props;
 
     // mandatory
     this.initScene();
@@ -121,7 +112,8 @@ class BodyChart extends PureComponent {
     this.initAxis();
     this.initLight();
 
-    this.drawPatient('Lung');
+    this.models = [];
+    this.drawPatient('Lung', 10);
 
     // draw affected area
     // this.addTumor(patientId, planId, '73.500-Gy.ply');
@@ -132,6 +124,9 @@ class BodyChart extends PureComponent {
   }
 
   drawPatient = (patientId, layerValue) => {
+    const bodyColor = 'rgb(237, 171, 135)';
+
+
     if (patientId === 'Head_Neck') {
       this.slicer = new Slicer(370);
       this.slicer.setX(10);
@@ -139,10 +134,15 @@ class BodyChart extends PureComponent {
       this.slicer.setZ(layerValue);
       this.slicer.draw(this.scene);
 
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Body');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56');
+
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord', 'rgb(245, 227, 225)', 0);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/BrainStem', 'rgb(240, 196, 86)', 0);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/PTV56', 'rgb(0,0,0)', 0.9);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Body', bodyColor, 0.4);
 
     } else if (patientId === 'Lung') {
       this.slicer = new Slicer(400);
@@ -151,12 +151,27 @@ class BodyChart extends PureComponent {
       this.slicer.setZ(layerValue);
       this.slicer.draw(this.scene);
 
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Spinal-cord');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-right');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-left');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-GTV');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Heart');
-      this.addModel('https://junction-planreview.azurewebsites.net/api/patients/Lung/images/1622-Series-CT01/structure-meshes/Body');
+      // add organs
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Lung/images/1622-Series-CT01/structure-meshes/Spinal-cord', 'rgb(245, 227, 225)', 0);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-right', 'rgb(135, 188, 204)', 0.7);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-left', 'rgb(135, 188, 204)', 0.7);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Lung/images/1622-Series-CT01/structure-meshes/Lung-GTV', 'rgb(0,0,0)', 0.9);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Lung/images/1622-Series-CT01/structure-meshes/Heart', 'rgb(135, 188, 204)', 0.7);
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Lung/images/1622-Series-CT01/structure-meshes/Body', bodyColor, 0.3);
+
+      // add cancer
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Lung/plans/JSu-IM102/isodose-meshes/63.000-Gy', 'rgb(255, 0, 0)', 0.9);
+
+    } else {
+      console.log('unknown patient ', patientId);
+      return;
     }
   };
 

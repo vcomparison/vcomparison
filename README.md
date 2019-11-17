@@ -7,3 +7,10 @@ build & push docker image
 
 ./push.sh <version-number>
 ```
+
+
+frontend
+```bash
+yarn install
+yarn dev
+```
