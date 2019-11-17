@@ -108,10 +108,6 @@ class BodyChart extends PureComponent {
     this.initControls();
     this.loader = new PLYLoader();
 
-    // scene elements
-    this.initAxis();
-    this.initLight();
-
     this.models = [];
     this.drawPatient('Lung', 10);
 
@@ -135,6 +131,11 @@ class BodyChart extends PureComponent {
       this.slicer.draw(this.scene);
 
 
+      // add cancer
+      this.addModel('https://junction-planreview.azurewebsites.net/api/' +
+        'patients/Head_Neck/plans/JSu-IM101/isodose-meshes/35.000-Gy', 'rgb(255, 0, 0)', 0.9);
+
+      // add organs
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
         'patients/Head_Neck/images/Study-1-Series-2-CT02/structure-meshes/Spinal-Cord', 'rgb(245, 227, 225)', 0);
       this.addModel('https://junction-planreview.azurewebsites.net/api/' +
@@ -184,6 +185,12 @@ class BodyChart extends PureComponent {
 
   renderScene = () => {
     this.renderer.render(this.scene, this.camera);
+
+    while(this.scene.children.length > 0){
+      this.scene.remove(this.scene.children[0]);
+    }
+    this.initAxis();
+    this.initLight();
   };
 
   componentWillUnmount() {
