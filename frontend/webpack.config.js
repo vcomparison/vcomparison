@@ -58,9 +58,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: [
-        'file-loader',
-        ],
+        use: ["file-loader"]
       }
     ]
   },
@@ -78,6 +76,8 @@ module.exports = {
     extensions: [".js", ".jsx", ".sass", ".css", ".svg"]
   },
   devServer: {
+    historyApiFallback: true,
+    hot: true,
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 3000

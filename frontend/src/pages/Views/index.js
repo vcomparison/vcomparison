@@ -3,6 +3,7 @@ import { Dropdown } from "semantic-ui-react";
 import PlansModel from "../../models/PlansModel";
 import PatientsModel from "../../models/PatientsModel";
 import BodyChart from "../components/BodyChart";
+import "./Views.css";
 
 class Views extends PureComponent {
   baseUrl = "https://junction-planreview.azurewebsites.net";
@@ -62,8 +63,7 @@ class Views extends PureComponent {
     this.setState({ filters: { ...filters, plans: planId } }, () => {
       this.loadImageToCanvas();
       onMetadataChange(filters.patients, planId, layerValue);
-    }
-    );
+    });
   };
 
   loadImageToCanvas = () => {
@@ -90,9 +90,8 @@ class Views extends PureComponent {
     const { onMetadataChange } = this.props;
     this.setState({ layerValue: value }, () => {
       this.loadImageToCanvas();
-      onMetadataChange(filters.patients, filters.plans, value)
-    }
-  );
+      onMetadataChange(filters.patients, filters.plans, value);
+    });
   };
 
   onPatientChange = ({ target }) => {
@@ -107,7 +106,7 @@ class Views extends PureComponent {
       },
       () => {
         this.fetchPlans();
-        onMetadataChange(filters.patients, filters.plans, layerValue)
+        onMetadataChange(filters.patients, filters.plans, layerValue);
       }
     );
   };
@@ -158,7 +157,7 @@ class Views extends PureComponent {
             </div>
           </div>
           <div className="col-xs-6">
-            <div className="app__block">
+            <div className="app__block app__block--two-dimentional">
               <div>
                 <div
                   style={
@@ -173,6 +172,18 @@ class Views extends PureComponent {
             </div>
           </div>
         </div>
+        {filters.plans && filters.patients && (
+          <div className="row">
+            <div className="col-xs-12">
+              <h2 className="views__title">Dose-volume histogram (DVH)</h2>
+              <img
+                width="100%"
+                alt="DVH"
+                src={`http://35.180.103.209/patients/${filters.patients}/plans/${filters.plans}.png`}
+              ></img>
+            </div>
+          </div>
+        )}
       </Fragment>
     );
   }

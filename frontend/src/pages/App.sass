@@ -6,6 +6,11 @@ $header-height: 36px
 $app-header-border-bottom-width: 4px
 
 .app
+  &__block
+    &--two-dimentional
+      display: flex
+      justify-content: center
+      background: #000000
   &__header-wrapper
     min-height: $header-height
     box-sizing: border-box
@@ -14,8 +19,6 @@ $app-header-border-bottom-width: 4px
   &__page-content
     height: calc(100vh - #{$header-height} - #{$app-header-border-bottom-width})
     overflow: auto
-  &__block
-    height: 100vh
   &__layer-slider-container
     display: flex
     align-items: center
