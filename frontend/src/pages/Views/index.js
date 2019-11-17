@@ -153,10 +153,12 @@ class Views extends PureComponent {
         <div className="row">
           <div className="col-xs-6">
             <div className="app__block">
+              <h2 className="views__title">3D model</h2>
               <BodyChart layerValue={layerValue} patientId={filters.patients} />
             </div>
           </div>
           <div className="col-xs-6">
+            <h2 className="views__title">Tomography slice</h2>
             <div className="app__block app__block--two-dimentional">
               <div>
                 <div
@@ -174,11 +176,11 @@ class Views extends PureComponent {
         </div>
         {filters.plans && filters.patients && (
           <div className="row">
-            <div className="col-xs-12">
+            <div className="col-xs-6">
               <h2 className="views__title">Dose-volume histogram (DVH)</h2>
               <div className="views__dvh-chart">
                 <img
-                  width="50%"
+                  width="100%"
                   alt="DVH"
                   src={`http://35.180.103.209/patients/${filters.patients}/plans/${filters.plans}.png`}
                 ></img>

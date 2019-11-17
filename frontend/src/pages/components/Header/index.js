@@ -4,12 +4,8 @@ import "./Header.css";
 
 const headerLinks = [
   {
-    label: "3D/2D images",
-    href: "/3D2D"
-  },
-  {
-    label: "3D image/DVH",
-    href: "/3DDVH"
+    label: "Views",
+    href: "/views"
   },
   {
     label: "Plans",
