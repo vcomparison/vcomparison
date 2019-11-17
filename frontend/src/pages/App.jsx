@@ -1,109 +1,14 @@
-import React, { PureComponent, Fragment } from "react";
-import { Dropdown, Button } from "semantic-ui-react";
-import { Switch, Route } from "react-router";
-import PlansModel from "../models/PlansModel";
-import PatientsModel from "../models/PatientsModel";
-import VoxelChart from "./components/VoxelChart";
-import "./App.sass";
-import BodyChart from "./components/BodyChart";
+import React, { PureComponent } from "react";
+import { Switch, Route, Redirect } from "react-router";
 import CommentArea from "./components/CommentArea";
 import Header from "./components/Header";
+import Views from "./Views";
 import Plans from "./Plans";
+import "./App.sass";
 
 class App extends PureComponent {
-  baseUrl = "https://junction-planreview.azurewebsites.net";
-  canvas = React.createRef();
-  layerSlider = React.createRef();
-
   state = {
-    layerValue: "1",
-    filters: {
-      patients: "Lung"
-    },
-    options: {},
-    isLoaded: false,
-    isFirstlyLoaded: false,
     isCommentBlockOpen: false
-  };
-
-  componentDidMount() {
-    PatientsModel.getPatients()
-      .then(patients => {
-        this.setState({
-          options: { patients: patients.map(value => ({ value, text: value })) }
-        });
-        this.fetchPlans();
-      })
-      .catch(() =>
-        this.setState({ options: { patients: [] }, isLoaded: true })
-      );
-    const canvas = this.canvas.current;
-    var context = canvas.getContext("2d");
-    context.scale(0.8, 0.8);
-    this.loadImageToCanvas();
-  }
-
-  fetchPlans = () => {
-    const {
-      filters: { patients },
-      options
-    } = this.state;
-    PlansModel.getPlans(patients)
-      .then(({ Plans }) => {
-        this.setState({
-          options: {
-            ...options,
-            plans: Plans.map(({ Id }) => ({ value: Id, text: Id }))
-          }
-        });
-        this.setState({ isLoaded: true });
-      })
-      .catch(() => this.setState({ isLoaded: true }));
-  };
-
-  onPlanChange = ({ target }) => {
-    const { filters } = this.state;
-    const planId = target.textContent;
-    if (filters.plans === planId) return null;
-    this.setState({ filters: { ...filters, plans: planId } }, () =>
-      this.loadImageToCanvas()
-    );
-  };
-
-  loadImageToCanvas = () => {
-    const { layerValue, filters, isFirstlyLoaded } = this.state;
-    const canvas = this.canvas.current;
-    var context = canvas.getContext("2d");
-    if (!isFirstlyLoaded) {
-      this.setState({ isFirstlyLoaded: true });
-      context.scale(0.9, 0.9);
-    }
-
-    var imageObj = new Image();
-
-    var imageUrl = `${this.baseUrl}/api/patients/${filters.patients}/plans/${filters.plans}/RenderedBitmaps/`;
-    imageObj.src = imageUrl + layerValue;
-
-    imageObj.onload = function() {
-      context.drawImage(this, 0, 0);
-    };
-  };
-
-  onLayerChange = ({ target: { value } }) => {
-    this.setState({ layerValue: value }, () => this.loadImageToCanvas());
-  };
-
-  onPatientChange = ({ target }) => {
-    const { filters, options } = this.state;
-    const value = target.textContent;
-    if (filters.patients === value) return null;
-    this.setState(
-      {
-        filters: { patients: value, plans: null },
-        options: { ...options, plans: [] }
-      },
-      () => this.fetchPlans()
-    );
   };
 
   onToggleComment = () => {
@@ -114,14 +19,7 @@ class App extends PureComponent {
   };
 
   render() {
-    const {
-      layerValue,
-      filters,
-      options,
-      isLoaded,
-      isCommentBlockOpen
-    } = this.state;
-    const currentMetadata = { layerValue, plan: filters.plans };
+    const { isCommentBlockOpen } = this.state;
     return (
       <div>
         <div className="app__header-wrapper">
@@ -132,73 +30,10 @@ class App extends PureComponent {
         <div className="app__page-content">
           <div className="container">
             <Switch>
-              <Route path="/plans">
-                <Plans />
-              </Route>
+              <Route path="/views" render={() => <Views />}></Route>
+              <Route path="/plans" render={() => <Plans />}></Route>
+              <Redirect from="/" to="/views" />
             </Switch>
-            {/* <Plans /> */}
-            <div className="row">
-              <div className="col-xs-6">
-                <div className="app__layer-slider-container">
-                  <div className="app__layer-slider-label">Layer value</div>
-                  <input
-                    type="range"
-                    min="-100"
-                    max="150"
-                    value={layerValue}
-                    ref={this.layerSlider}
-                    onChange={this.onLayerChange}
-                  ></input>
-                </div>
-              </div>
-              <div className="col-xs-6">
-                {isLoaded && (
-                  <div className="filters">
-                    <Dropdown
-                      selection
-                      options={options.patients}
-                      value={filters.patients}
-                      onChange={this.onPatientChange}
-                    />
-                    {options.plans && (
-                      <Dropdown
-                        selection
-                        options={options.plans}
-                        value={filters.plans}
-                        onChange={this.onPlanChange}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-xs-6">
-                <div className="app__block">
-                  <BodyChart layerValue={layerValue} />
-                </div>
-              </div>
-              <div className="col-xs-6">
-                <div className="app__block">
-                  <div>
-                    <div
-                      style={
-                        options.plans && options.plans.length > 0
-                          ? { width: "394px" }
-                          : { width: 0 }
-                      }
-                    >
-                      <canvas
-                        ref={this.canvas}
-                        width="394"
-                        height="394"
-                      ></canvas>
-                    </div>
-                    {/* <VoxelChart /> */}
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <div
@@ -207,9 +42,8 @@ class App extends PureComponent {
           }`}
         >
           <CommentArea />
-          <div onClick={this.onToggleComment}
-               className="app__comment-icon">
-              Comments
+          <div onClick={this.onToggleComment} className="app__comment-icon">
+            Comments
           </div>
         </div>
       </div>
