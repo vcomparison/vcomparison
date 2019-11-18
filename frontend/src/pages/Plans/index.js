@@ -103,9 +103,6 @@ class Plans extends PureComponent {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Plans</Table.HeaderCell>
-                  {viewMode === "table" && (
-                    <Table.HeaderCell></Table.HeaderCell>
-                  )}
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -124,7 +121,6 @@ class Plans extends PureComponent {
                         checked={selectedPlan === plan.value}
                       />
                     </Table.Cell>
-                    {viewMode === "table" && <Table.Cell>Cell</Table.Cell>}
                   </Table.Row>
                 ))}
               </Table.Body>
