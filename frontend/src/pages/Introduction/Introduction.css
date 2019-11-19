@@ -1,0 +1,25 @@
+.intro__href {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.ui.button.intro__button {
+    font-size: 32px;
+    background: #ffffff;
+    color: #2e7dca;
+    /* border: 2px solid #87c4ff; */
+    box-shadow: 0 0 12px 0px #5b6977;
+    cursor: pointer;
+}
+
+.intro__button-container {
+display: flex;
+height: 94vh;
+align-items: center;}
+
+.intro {
+    position: relative;
+    background: url(../../background.jpeg);
+    background-size: cover;
+}

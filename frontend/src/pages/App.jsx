@@ -7,6 +7,7 @@ import Plans from "./Plans";
 import Comparison from "./Comparison";
 import "./App.sass";
 import ReportTable from "./components/ReportTable";
+import Introduction from './Introduction'
 
 class App extends PureComponent {
   state = {
@@ -45,7 +46,8 @@ class App extends PureComponent {
               ></Route>
               <Route path="/plans" render={() => <Plans />}></Route>
               <Route path="/comparison" render={() => <Comparison />}></Route>
-              <Redirect from="/" to="/views" />
+              <Route path="/intro" render={() => <Introduction />}></Route>
+              <Redirect from="/" to="/intro" />
             </Switch>
           </div>
         </div>

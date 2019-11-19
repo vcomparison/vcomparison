@@ -7,6 +7,7 @@ h2.views__title {
 .views__dvh-chart {
     display: flex;
     justify-content: center;
+    align-items: flex-start;
 }
 
 .views__input-range {
